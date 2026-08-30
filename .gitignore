@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # local sqlite (wrangler --persist-to)
 .wrangler/state/
+
+# TypeScript 增量编译缓存
+*.tsbuildinfo
