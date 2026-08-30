@@ -19,7 +19,7 @@ Moodseed 是一款以 **情绪记录 + 认知行为疗法(CBT) + 植物拼图成
 
 ## 技术栈
 
-- **前端**：React + Vite + TypeScript + Tailwind CSS + CSS 3D 视差 + react-router（HashRouter）
+- **前端**：React + Vite + TypeScript + Tailwind CSS + Three.js + react-router（HashRouter）
 - **后端**：Cloudflare Pages Functions（Workers 运行时）
 - **数据库**：Cloudflare D1（SQLite）
 - **存储**：Cloudflare R2（用户上传图片）
@@ -37,7 +37,8 @@ moodseed/
 ├── functions/            # Pages Functions（API + D1/R2/DeepSeek）
 ├── migrations/           # D1 迁移 SQL
 ├── data/                 # 静态内容（植物/情绪/CBT/幸运卡）
-├── public/               # 植物 SVG 插画等静态资源
+├── public/               # 植物插画 PNG 等静态资源
+├── references/           # 原始素材（植物插画、拼图纹理参考）
 └── wrangler.jsonc        # Cloudflare 绑定配置
 ```
 

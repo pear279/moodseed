@@ -4,7 +4,6 @@ import { useApp } from '../context/AppContext'
 import { api } from '../lib/api'
 import { todayStr } from '../lib/constants'
 import type { CheckinToday, RecordItem } from '../lib/types'
-import { LuckyCardModal } from '../components/LuckyCardModal'
 import { IconCheck, IconChevronDown, IconPlus, IconSparkle } from '../components/icons'
 
 function greeting(): string {
@@ -75,10 +74,10 @@ export default function RecordPage() {
   const { user, refreshUser } = useApp()
   const navigate = useNavigate()
   const [checkin, setCheckin] = useState<CheckinToday | null>(null)
-  const [lucky, setLucky] = useState<CheckinToday['lucky']>(null)
   const [records, setRecords] = useState<RecordItem[]>([])
   const [loadingRecords, setLoadingRecords] = useState(true)
   const [checkingIn, setCheckingIn] = useState(false)
+  const [justChecked, setJustChecked] = useState(false)
   const [error, setError] = useState('')
 
   const load = useCallback(async () => {
@@ -108,7 +107,8 @@ export default function RecordPage() {
     try {
       const res = await api.checkin(user.id)
       setCheckin(res)
-      setLucky(res.lucky)
+      setJustChecked(true)
+      setTimeout(() => setJustChecked(false), 1200)
       await refreshUser()
     } finally {
       setCheckingIn(false)
@@ -150,6 +150,49 @@ export default function RecordPage() {
           <IconSparkle width={14} height={14} /> 当前积分 {user?.points ?? 0}
         </div>
       </section>
+
+      {/* 今日幸运卡（常驻卡片位，每日更新） */}
+      {checkin?.lucky && (
+        <section
+          className={`mt-4 rounded-3xl bg-white p-5 shadow-card ${justChecked ? 'animate-pop-in' : ''}`}
+        >
+          <div className="flex items-center justify-between">
+            <div className="text-sm font-medium">✨ 今日幸运卡</div>
+            <div className="text-xs text-ink/40">{checkin.lucky.date}</div>
+          </div>
+          <p className="mt-3 text-center text-base font-medium leading-relaxed text-ink">
+            「{checkin.lucky.phrase}」
+          </p>
+          <div className="mt-4 grid grid-cols-2 gap-3">
+            <div className="rounded-2xl bg-sand/60 p-3">
+              <div className="text-xs font-medium text-leaf">宜</div>
+              <ul className="mt-1 space-y-0.5 text-xs text-ink/70">
+                {(checkin.lucky.yi.length ? checkin.lucky.yi : ['慢一点', '休息一下']).map((x) => (
+                  <li key={x}>· {x}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-2xl bg-sand/60 p-3">
+              <div className="text-xs font-medium text-[#C9886B]">忌</div>
+              <ul className="mt-1 space-y-0.5 text-xs text-ink/70">
+                {(checkin.lucky.ji.length ? checkin.lucky.ji : ['熬夜', '冲动决定']).map((x) => (
+                  <li key={x}>· {x}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className="mt-3 flex items-center gap-2 rounded-2xl bg-sand/40 px-3 py-2.5">
+            <span
+              className="h-4 w-4 rounded-full ring-1 ring-ink/10"
+              style={{ background: checkin.lucky.color.hex }}
+            />
+            <span className="text-xs text-ink/60">今日幸运色</span>
+            <span className="ml-auto text-sm font-medium" style={{ color: checkin.lucky.color.hex }}>
+              {checkin.lucky.color.name}
+            </span>
+          </div>
+        </section>
+      )}
 
       {/* 添加记录 */}
       <button
@@ -195,8 +238,6 @@ export default function RecordPage() {
           ))}
         </div>
       </section>
-
-      <LuckyCardModal card={lucky} onClose={() => setLucky(null)} />
     </div>
   )
 }

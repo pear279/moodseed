@@ -4,9 +4,10 @@ import { useApp } from '../context/AppContext'
 import { api } from '../lib/api'
 import { REWARDS } from '../lib/constants'
 import type { Plant, PlantProgress, ProgressOverview } from '../lib/types'
-import { PuzzleGrid } from '../components/PuzzleGrid'
-import { TiltCard } from '../components/TiltCard'
+import { PlantPuzzle3D } from '../three/PlantPuzzle3D'
 import { IconBottle, IconLock } from '../components/icons'
+
+const ALL_48 = Array.from({ length: REWARDS.piecesPerPlant }, (_, i) => i)
 
 const COLLECTED_KEY = 'moodseed_collected_plants'
 
@@ -163,20 +164,9 @@ export default function PuzzlePage() {
             <h2 className="mt-3 text-lg font-semibold">植物完整复苏！</h2>
             <p className="mt-1 text-sm text-ink/60">你已点亮 {celebrate.name} 的全部 48 块拼图。</p>
 
-            {/* 植物卡片（双面翻转一圈） */}
-            <div className="mx-auto mt-5 aspect-[3/4] w-44 [perspective:1000px]">
-              <div className="animate-flip-spin relative h-full w-full [transform-style:preserve-3d]">
-                <div className="absolute inset-0 grid place-items-center rounded-2xl bg-gradient-to-br from-leaf to-moss text-white shadow-glow [backface-visibility:hidden] [transform:rotateY(180deg)]">
-                  <div className="px-4 text-center">
-                    <div className="text-4xl">🌿</div>
-                    <div className="mt-2 text-lg font-semibold">{celebrate.name}</div>
-                    <div className="mt-1 text-sm text-white/80">{celebrate.keyword}</div>
-                  </div>
-                </div>
-                <div className="absolute inset-0 overflow-hidden rounded-2xl shadow-glow [backface-visibility:hidden]">
-                  <img src={celebrate.image} alt={celebrate.name} className="h-full w-full object-cover" />
-                </div>
-              </div>
+            {/* 植物卡片（Three.js 翻牌一圈） */}
+            <div className="mx-auto mt-5 h-52 w-full">
+              <PlantPuzzle3D image={celebrate.image} positions={ALL_48} flip className="h-full w-full" />
             </div>
 
             <div className="mt-4 text-sm font-medium text-leaf">{celebrate.keyword}</div>
@@ -247,9 +237,12 @@ function PlantView({ view }: { view: View }) {
       </div>
 
       <div className="flex-1">
-        <TiltCard>
-          <PuzzleGrid image={view.plant.image} positions={view.progress.positions} />
-        </TiltCard>
+        <PlantPuzzle3D
+          image={view.plant.image}
+          positions={view.progress.positions}
+          flip={count >= REWARDS.piecesPerPlant}
+          className="h-full w-full"
+        />
       </div>
 
       <p className="mt-3 text-center text-sm text-ink/60">「{view.plant.phrase}」</p>

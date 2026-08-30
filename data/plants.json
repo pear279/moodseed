@@ -5,7 +5,7 @@
     "keyword": "边界",
     "phrase": "保护自己的边界，也是一种温柔。",
     "order": 1,
-    "image": "/plants/cactus.svg"
+    "image": "/plants/cactus.png"
   },
   {
     "id": "dandelion",
@@ -13,7 +13,7 @@
     "keyword": "释怀",
     "phrase": "有些事，让风带走吧，你不需要一直扛着。",
     "order": 2,
-    "image": "/plants/dandelion.svg"
+    "image": "/plants/dandelion.png"
   },
   {
     "id": "sunflower",
@@ -21,7 +21,7 @@
     "keyword": "希望",
     "phrase": "即使阴天，也记得朝向有光的方向。",
     "order": 3,
-    "image": "/plants/sunflower.svg"
+    "image": "/plants/sunflower.png"
   },
   {
     "id": "aloe",
@@ -29,7 +29,7 @@
     "keyword": "自愈",
     "phrase": "伤口会慢慢愈合，给自己一点时间。",
     "order": 4,
-    "image": "/plants/aloe.svg"
+    "image": "/plants/aloe.png"
   },
   {
     "id": "ivy",
@@ -37,6 +37,6 @@
     "keyword": "韧性",
     "phrase": "一点一点，也能爬满一整面墙。",
     "order": 5,
-    "image": "/plants/ivy.svg"
+    "image": "/plants/ivy.png"
   }
 ]

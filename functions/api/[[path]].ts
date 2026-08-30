@@ -184,7 +184,8 @@ async function checkinRoutes(env: Env, method: string, segs: string[], request: 
       .first()
     const user = await db.prepare('SELECT points FROM users WHERE id = ?').bind(userId).first()
     if (row) return json({ checked_in: true, points: user?.points ?? 0, lucky: parseJson(row.lucky, null) })
-    return json({ checked_in: false, points: user?.points ?? 0, lucky: null })
+    // 未签到也返回确定性幸运卡，供「今日幸运卡」常驻卡片展示
+    return json({ checked_in: false, points: user?.points ?? 0, lucky: buildLuckyCard(userId) })
   }
 
   return jsonError('Not found', 404)
