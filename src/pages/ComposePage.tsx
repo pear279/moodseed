@@ -6,6 +6,15 @@ import { REWARDS } from '../lib/constants'
 import { EmotionPicker } from '../components/EmotionPicker'
 import { IconArrowLeft, IconClose, IconImage, IconSparkle } from '../components/icons'
 
+// 5 级心情脸主轴（对应一个代表性情绪标签，快选）
+const MOODS = [
+  { emoji: '😞', label: '很糟', tag: '难过' },
+  { emoji: '😕', label: '不太好', tag: '疲惫' },
+  { emoji: '😐', label: '一般', tag: '平静' },
+  { emoji: '🙂', label: '不错', tag: '满足' },
+  { emoji: '😄', label: '很好', tag: '开心' },
+]
+
 export default function ComposePage() {
   const { user, refreshUser } = useApp()
   const navigate = useNavigate()
@@ -180,7 +189,27 @@ export default function ComposePage() {
 
         {/* 情绪标签 */}
         <div>
-          <div className="mb-2 text-sm text-ink/60">此刻的情绪（可多选）</div>
+          <div className="mb-2 text-sm text-ink/60">此刻的心情</div>
+          <div className="grid grid-cols-5 gap-2">
+            {MOODS.map((m) => {
+              const active = tags.includes(m.tag)
+              return (
+                <button
+                  key={m.emoji}
+                  onClick={() =>
+                    setTags((t) => (t.includes(m.tag) ? t.filter((x) => x !== m.tag) : [...t, m.tag]))
+                  }
+                  className={`flex flex-col items-center gap-1 rounded-2xl py-2.5 transition-all ${
+                    active ? 'bg-moss text-white shadow-card' : 'bg-white text-ink/70 active:bg-lime/30'
+                  }`}
+                >
+                  <span className="text-2xl">{m.emoji}</span>
+                  <span className="text-xs">{m.label}</span>
+                </button>
+              )
+            })}
+          </div>
+          <div className="mt-3 mb-2 text-sm text-ink/60">更细的情绪（可选）</div>
           <EmotionPicker selected={tags} onChange={setTags} />
         </div>
 
