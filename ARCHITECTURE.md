@@ -101,7 +101,7 @@ comments(id TEXT PK, bottle_id TEXT, user_id TEXT, content TEXT,
 | POST | `/api/bottles/:id/report` | 举报（置 hidden） |
 | DELETE | `/api/bottles/:id` | 删除自己内容（置 deleted） |
 
-> 图片上传：R2 直传或经 `/api/upload` 中转（demo 用中转，上传后返回公开 URL）。内容安全：敏感词本地过滤 + 举报置 `hidden` + 删除置 `deleted`。
+> 图片上传：经 `/api/upload` 上传到 R2，图片通过 **Functions 代理**（`GET /api/image/:key` 读 R2 返回）访问，`image_url` 存相对路径 `/api/image/:key`。这样**无需配置 R2 公共桶 / r2.dev 子域 / 自定义域名**，对 demo 更稳、零额外运维（偏离草案「R2 公开 URL」的做法，理由：r2.dev 限速且生产需自定义域名，代理访问同源、免配置）。内容安全：敏感词本地过滤 + 举报置 `hidden` + 删除置 `deleted`。
 
 ## Key interactions
 
