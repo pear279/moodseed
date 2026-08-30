@@ -102,6 +102,15 @@ async function main() {
   assert(stats.json.stats.plants_unlocked === 0, '已解锁植物 0')
   assert(stats.json.activity?.[0]?.pieces === 3, '活动日历今日 3 块')
 
+  // 8. 图片上传（R2）与回读
+  const form = new FormData()
+  form.append('file', new Blob(['fake-image-bytes'], { type: 'image/png' }), 'tiny.png')
+  const up = await fetch(BASE + '/api/upload', { method: 'POST', body: form })
+  const upJson = await up.json()
+  assert(up.status === 200 && upJson.url.startsWith('/api/image/'), '图片上传返回 URL')
+  const img = await fetch(BASE + upJson.url)
+  assert(img.status === 200 && (img.headers.get('content-type') || '').startsWith('image/'), '图片可经 /api/image 回读')
+
   console.log(failures === 0 ? '\n✅ 全部通过\n' : `\n❌ ${failures} 项失败\n`)
   process.exit(failures === 0 ? 0 : 1)
 }

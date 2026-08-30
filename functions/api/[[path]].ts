@@ -553,7 +553,7 @@ export async function onRequest(context: any): Promise<Response> {
   const segs = url.pathname.replace(/^\/api\/?/, '').split('/').filter(Boolean)
 
   try {
-    if (segs[0] === 'image' && segs[1]) return await serveImage(env, segs[1])
+    if (segs[0] === 'image' && segs[1]) return await serveImage(env, segs.slice(1).join('/'))
     if (segs[0] === 'user') return await userRoutes(env, method, segs, request)
     if (segs[0] === 'checkin') return await checkinRoutes(env, method, segs, request)
     if (segs[0] === 'records') return await recordRoutes(env, method, segs, request)
