@@ -5,6 +5,7 @@ import { api } from '../lib/api'
 import { REWARDS } from '../lib/constants'
 import type { Plant, PlantProgress, ProgressOverview } from '../lib/types'
 import { PuzzleGrid } from '../components/PuzzleGrid'
+import { TiltCard } from '../components/TiltCard'
 import { IconBottle, IconLock } from '../components/icons'
 
 const COLLECTED_KEY = 'moodseed_collected_plants'
@@ -239,7 +240,9 @@ function PlantView({ view }: { view: View }) {
       </div>
 
       <div className="flex-1">
-        <PuzzleGrid image={view.plant.image} positions={view.progress.positions} />
+        <TiltCard>
+          <PuzzleGrid image={view.plant.image} positions={view.progress.positions} />
+        </TiltCard>
       </div>
 
       <p className="mt-3 text-center text-sm text-ink/60">「{view.plant.phrase}」</p>

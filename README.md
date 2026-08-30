@@ -6,7 +6,7 @@ Moodseed 是一款以 **情绪记录 + 认知行为疗法(CBT) + 植物拼图成
 
 ## 技术栈
 
-- **前端**：React + Vite + TypeScript + Tailwind CSS + Three.js（预留）+ react-router（HashRouter）
+- **前端**：React + Vite + TypeScript + Tailwind CSS + CSS 3D 视差 + react-router（HashRouter）
 - **后端**：Cloudflare Pages Functions（Workers 运行时）
 - **数据库**：Cloudflare D1（SQLite）
 - **存储**：Cloudflare R2（用户上传图片）

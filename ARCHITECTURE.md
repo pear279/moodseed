@@ -6,7 +6,7 @@
 | --- | --- | --- |
 | 前端 | React 18 + Vite + TypeScript | 页面与组件 |
 | 样式 | Tailwind CSS | 移动端布局/样式/简单动画 |
-| 视觉 | Three.js（仅空间效果）+ CSS 揭示 | 卡片倾斜视差、碎片恢复、翻牌、光晕 |
+| 视觉 | CSS 3D 变换（倾斜视差/翻牌/光晕）+ CSS 碎片揭示 | 卡片倾斜视差、碎片恢复、翻牌、光晕（见下方说明） |
 | 路由 | react-router-dom（HashRouter） | SPA 零配置、Pages 无需 `_redirects` |
 | 农历/星座 | lunar-javascript | 黄历宜忌、星座、干支（本地，不调付费 API） |
 | 后端 | Cloudflare Pages Functions（基于 Workers） | 一体化承载 API |
@@ -34,7 +34,9 @@ Cloudflare Pages
 ```
 
 - 用户体系：无登录。首次打开生成 `anonymous_user_id`（UUID）存 LocalStorage 并 upsert 到 D1。
-- 植物拼图视觉：一张完整植物插画（SVG/PNG）在 6×8 DOM 网格上按 `background-position` 切片；未解锁格 `filter: grayscale` + 蜘蛛网 SVG 覆盖，解锁格恢复彩色。Three.js 仅渲染整张插画平面做指针跟随的轻倾斜视差，完整解锁时翻转（CSS 3D + 光晕）。
+- 植物拼图视觉：一张完整植物插画（SVG/PNG）在 6×8 DOM 网格上按 `background-position` 切片；未解锁格 `filter: grayscale` + 蜘蛛网 SVG 覆盖，解锁格恢复彩色。
+
+> **视觉实现说明（偏离草案）**：草案指定用 Three.js 做卡片倾斜视差。为贯彻「轻量」，改用 **CSS 3D transform**（`perspective` + `rotateX/rotateY` 指针跟随）实现同样的倾斜视差与翻牌光晕，避免引入 Three.js 带来的 ~150KB 额外包体。碎片「灰→彩」揭示用 CSS `filter` 过渡。视觉效果等价、成本更低；若后续要更强的空间感可再引入 Three.js（接口已隔离在 `TiltCard`）。
 
 ## Data model（D1，8 张表）
 
