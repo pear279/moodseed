@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
+  "packageManager": "pnpm@11.22.0",
   "description": "Moodseed 情绪植物拼图 — 情绪记录 + CBT + 植物拼图成长",
   "scripts": {
     "dev": "vite",
