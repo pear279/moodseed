@@ -351,21 +351,26 @@ async function progressRoute(env: Env, request: Request) {
   const all = await db.prepare('SELECT * FROM puzzle_progress WHERE user_id = ?').bind(userId).all()
   const rows = (all.results ?? []) as ProgressRow[]
   const byPlant = new Map(rows.map((r) => [r.plant_id, r]))
+  const ordered = orderedPlants()
 
-  const progress = orderedPlants().map((plant) => {
+  const currentPlantId = currentPlantOf(rows)
+  const currentIdx = ordered.findIndex((p) => p.id === currentPlantId)
+
+  const progress = ordered.map((plant, idx) => {
     const r = byPlant.get(plant.id)
+    let status = r?.status ?? 'active'
+    if (!r && idx > currentIdx) status = 'locked'
     return {
       plant_id: plant.id,
       unlocked_count: r?.unlocked_count ?? 0,
       positions: r ? parseJson<number[]>(r.positions, []) : [],
-      status: r?.status ?? 'active',
+      status,
       completed_at: r?.completed_at ?? null,
     }
   })
 
-  const currentPlantId = currentPlantOf(rows)
   return json({
-    plants: orderedPlants(),
+    plants: ordered,
     progress,
     currentPlantId,
     nextPlantId: nextPlantOf(currentPlantId),
