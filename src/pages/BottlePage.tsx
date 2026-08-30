@@ -40,8 +40,8 @@ export default function BottlePage() {
     try {
       const b = await api.randomBottle(user.id, currentPlantId)
       setBottle(b)
-      setRemaining((r) => Math.max(0, r - 1))
       if (b) {
+        setRemaining((r) => Math.max(0, r - 1))
         const d = await api.getBottle(b.id, user.id)
         setDetail(d)
       }
