@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- subtle cobweb, drawn from top-left corner -->
+  <g stroke="#8C8577" stroke-width="1.6" opacity="0.55" stroke-linecap="round">
+    <line x1="6" y1="6" x2="96" y2="6"/>
+    <line x1="6" y1="6" x2="6" y2="96"/>
+    <line x1="6" y1="6" x2="94" y2="70"/>
+    <line x1="6" y1="6" x2="70" y2="94"/>
+    <line x1="6" y1="6" x2="94" y2="40"/>
+    <line x1="6" y1="6" x2="40" y2="94"/>
+    <line x1="6" y1="6" x2="96" y2="18"/>
+    <line x1="6" y1="6" x2="18" y2="96"/>
+  </g>
+  <g fill="none" stroke="#8C8577" stroke-width="1.4" opacity="0.45">
+    <path d="M26 6 Q24 34 6 40"/>
+    <path d="M52 6 Q40 48 6 56"/>
+    <path d="M80 6 Q58 54 6 74"/>
+    <path d="M6 26 Q34 24 40 6"/>
+    <path d="M6 52 Q48 40 56 6"/>
+    <path d="M6 80 Q54 58 74 6"/>
+  </g>
+</svg>

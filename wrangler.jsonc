@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "moodseed",
+  "compatibility_date": "2026-08-29",
+  "pages_build_output_dir": "dist",
+  "d1_databases": [
+    { "binding": "DB", "database_name": "moodseed-db" }
+  ],
+  "r2_buckets": [
+    { "binding": "R2", "bucket_name": "moodseed-images" }
+  ]
+}

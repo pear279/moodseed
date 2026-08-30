@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" fill="none">
+  <defs>
+    <linearGradient id="sStem" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7BA05B"/>
+      <stop offset="1" stop-color="#4C7A4E"/>
+    </linearGradient>
+    <radialGradient id="sCenter" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#C9886B"/>
+      <stop offset="0.6" stop-color="#8A5C3F"/>
+      <stop offset="1" stop-color="#6B4630"/>
+    </radialGradient>
+  </defs>
+
+  <ellipse cx="300" cy="740" rx="120" ry="18" fill="#2E3A2E" opacity="0.07"/>
+
+  <!-- stem -->
+  <path d="M294 300 c8 150-8 240-12 320 c-2 22 16 34 28 20 c12 70 18 110 20 150 c1 16 22 16 22 0 c2-70 6-120 10-150 c12 14 30 2 28-20 c-4-80-20-170-12-320 z" fill="url(#sStem)"/>
+
+  <!-- leaves -->
+  <path d="M300 560 c-70-20-120-60-140-110 c30 8 60 30 76 62 z" fill="#5B8C5A"/>
+  <path d="M300 620 c70-20 120-60 140-110 c-30 8-60 30-76 62 z" fill="#4C7A4E"/>
+
+  <!-- petals -->
+  <g transform="translate(300 260)">
+    <g fill="#F5C97B">
+      <ellipse cx="0" cy="-96" rx="34" ry="62"/>
+      <ellipse cx="92" cy="-28" rx="34" ry="62" transform="rotate(20 92 -28)"/>
+      <ellipse cx="57" cy="77" rx="34" ry="62" transform="rotate(40 57 77)"/>
+      <ellipse cx="-57" cy="77" rx="34" ry="62" transform="rotate(-40 -57 77)"/>
+      <ellipse cx="-92" cy="-28" rx="34" ry="62" transform="rotate(-20 -92 -28)"/>
+      <ellipse cx="0" cy="96" rx="34" ry="62" transform="rotate(90 0 96)"/>
+      <ellipse cx="96" cy="0" rx="34" ry="62" transform="rotate(90 96 0)"/>
+      <ellipse cx="-96" cy="0" rx="34" ry="62" transform="rotate(90 -96 0)"/>
+    </g>
+    <g fill="#E8A87C">
+      <ellipse cx="46" cy="-84" rx="30" ry="54" transform="rotate(30 46 -84)"/>
+      <ellipse cx="84" cy="46" rx="30" ry="54" transform="rotate(60 84 46)"/>
+      <ellipse cx="-46" cy="84" rx="30" ry="54" transform="rotate(-30 -46 84)"/>
+      <ellipse cx="-84" cy="-46" rx="30" ry="54" transform="rotate(-60 -84 -46)"/>
+    </g>
+    <circle r="70" fill="url(#sCenter)"/>
+    <g fill="#6B4630" opacity="0.7">
+      <circle cx="-20" cy="-18" r="6"/>
+      <circle cx="22" cy="-12" r="6"/>
+      <circle cx="0" cy="20" r="6"/>
+      <circle cx="-26" cy="18" r="6"/>
+      <circle cx="24" cy="20" r="6"/>
+    </g>
+  </g>
+</svg>

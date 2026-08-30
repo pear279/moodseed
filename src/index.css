@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --cream: #faf7f0;
+  --ink: #2e3a2e;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #e9e4d8;
+  color: var(--ink);
+  font-family: ui-sans-serif, system-ui, -apple-system, 'PingFang SC', 'Noto Sans SC',
+    'Microsoft YaHei', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+/* 移动端 App 外壳：桌面居中，移动端全宽 */
+.app-shell {
+  max-width: 28rem;
+  margin: 0 auto;
+  min-height: 100dvh;
+  background: var(--cream);
+  box-shadow: 0 0 0 1px rgba(46, 58, 46, 0.04), 0 0 40px rgba(46, 58, 46, 0.08);
+}
+
+/* 隐藏滚动条但可滚动 */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* 破败（未解锁）拼图块 */
+.piece-broken {
+  filter: grayscale(1) brightness(0.72) contrast(0.9);
+}
+
+/* 安全区适配 */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" fill="none">
+  <defs>
+    <linearGradient id="cBody" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#8FC08A"/>
+      <stop offset="0.55" stop-color="#5B8C5A"/>
+      <stop offset="1" stop-color="#3F6B40"/>
+    </linearGradient>
+    <linearGradient id="cPot" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#C9886B"/>
+      <stop offset="1" stop-color="#9C6B52"/>
+    </linearGradient>
+    <radialGradient id="cFlower" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#F7C8CE"/>
+      <stop offset="1" stop-color="#E59AA6"/>
+    </radialGradient>
+  </defs>
+
+  <!-- soft ground shadow -->
+  <ellipse cx="300" cy="720" rx="180" ry="26" fill="#2E3A2E" opacity="0.08"/>
+
+  <!-- pot -->
+  <path d="M210 560 h180 l-16 150 a20 20 0 0 1-20 20 h-108 a20 20 0 0 1-20-20 z" fill="url(#cPot)"/>
+  <rect x="196" y="548" width="208" height="26" rx="10" fill="#B8785C"/>
+
+  <!-- main body -->
+  <path d="M266 548 v-40 c0-200 68-200 68 0 v40 z" fill="url(#cBody)"/>
+  <path d="M266 548 c0-210 14-240 34-240 s34 30 34 240 z" fill="#4C7A4E" opacity="0.35"/>
+
+  <!-- left arm -->
+  <path d="M266 360 h-46 c-34 0-34 34 0 34 h10 v54 c0 30 36 30 36 0 v-88 z" fill="url(#cBody)"/>
+  <!-- right arm -->
+  <path d="M334 300 h46 c34 0 34 34 0 34 h-10 v70 c0 30-36 30-36 0 v-104 z" fill="url(#cBody)"/>
+
+  <!-- flower -->
+  <g transform="translate(300 300)">
+    <circle r="30" fill="url(#cFlower)"/>
+    <circle r="12" fill="#F2E4A6"/>
+  </g>
+
+  <!-- spines -->
+  <g stroke="#C9E3B8" stroke-width="3" stroke-linecap="round" opacity="0.85">
+    <line x1="300" y1="360" x2="300" y2="342"/>
+    <line x1="280" y1="420" x2="266" y2="408"/>
+    <line x1="320" y1="470" x2="334" y2="458"/>
+    <line x1="296" y1="500" x2="288" y2="486"/>
+  </g>
+</svg>

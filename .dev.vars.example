@@ -1,0 +1,5 @@
+# DeepSeek API（本地开发用；线上用 `wrangler secret put`）
+# 留空则走本地规则兜底，demo 仍可跑通
+DEEPSEEK_API_KEY=
+DEEPSEEK_BASE_URL=https://api.deepseek.com
+DEEPSEEK_MODEL=deepseek-v4-flash
