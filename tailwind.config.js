@@ -47,12 +47,17 @@ export default {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-6px)' },
         },
+        'flip-spin': {
+          '0%': { transform: 'rotateY(0deg)' },
+          '100%': { transform: 'rotateY(360deg)' },
+        },
       },
       animation: {
         'fade-in': 'fade-in 0.3s ease-out',
         'slide-up': 'slide-up 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
         'pop-in': 'pop-in 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
         float: 'float 3s ease-in-out infinite',
+        'flip-spin': 'flip-spin 1.4s cubic-bezier(0.4, 0, 0.2, 1) both',
       },
     },
   },
