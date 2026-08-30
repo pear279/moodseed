@@ -384,7 +384,13 @@ async function exchangeRoute(env: Env, request: Request) {
   const user = await db.prepare('SELECT points FROM users WHERE id = ?').bind(userId).first()
   if (!user || (user.points ?? 0) < POINTS_PER_PIECE) return jsonError('积分不足')
 
-  await db.prepare('UPDATE users SET points = points - ? WHERE id = ?').bind(POINTS_PER_PIECE, userId).run()
+  // 条件原子扣减：并发下也不会把积分扣成负数
+  const dec = await db
+    .prepare('UPDATE users SET points = points - ? WHERE id = ? AND points >= ?')
+    .bind(POINTS_PER_PIECE, userId, POINTS_PER_PIECE)
+    .run()
+  if (dec.meta?.changes !== 1) return jsonError('积分不足')
+
   await db
     .prepare(
       `INSERT INTO point_transactions (id, user_id, local_date, delta, reason, created_at)
