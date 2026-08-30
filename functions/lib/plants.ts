@@ -56,6 +56,9 @@ export async function awardPieces(db: any, userId: string, count: number): Promi
   const existing = rows.find((r) => r.plant_id === plantId)
 
   const positions = parseJson<number[]>(existing?.positions, [])
+  if (count <= 0) {
+    return { plantId, unlockedCount: positions.length, newPositions: [], completed: positions.length >= PIECES }
+  }
   const shuffled = seededShuffle(PIECES, `${userId}:${plantId}`)
   const newPositions: number[] = []
   for (const p of shuffled) {

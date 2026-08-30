@@ -270,7 +270,7 @@ async function createRecord(env: Env, request: Request) {
   }
 
   const totalPieces = recordPiece + streakPieces
-  const award = totalPieces > 0 ? await awardPieces(db, userId, totalPieces) : null
+  const award = await awardPieces(db, userId, totalPieces)
 
   const row = await db.prepare('SELECT * FROM records WHERE id = ?').bind(id).first()
   return json({

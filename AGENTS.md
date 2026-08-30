@@ -12,6 +12,7 @@ pnpm dev              # Vite 前端本地开发
 pnpm dev:api          # wrangler pages dev（本地 D1/R2/Functions）
 pnpm build            # tsc + vite build
 pnpm preview          # 预览构建产物
+pnpm test             # API 冒烟测试（需先 pnpm dev:api）
 pnpm db:migrate:local # 本地 D1 迁移
 pnpm db:migrate:prod  # 线上 D1 迁移（需 Cloudflare 登录）
 ```
