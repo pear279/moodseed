@@ -342,7 +342,7 @@ export default function ComposePage() {
 
           {/* 情绪标签（保留） */}
           <div>
-            <div className="mb-2 text-sm text-ink/60">更细的情绪（可选）</div>
+            <div className="mb-2 text-sm text-ink/60">微情绪</div>
             <EmotionPicker selected={tags} onChange={setTags} />
           </div>
 
