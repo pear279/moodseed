@@ -1,11 +1,11 @@
 // 产品规则常量 —— 单一事实来源，前后端一致
 export const REWARDS = {
-  /** 每株植物拼图块数 */
-  piecesPerPlant: 48,
+  /** 每株植物拼图块数（36 片，6×6 正方形） */
+  piecesPerPlant: 36,
   /** 拼图网格列数 */
   gridCols: 6,
   /** 拼图网格行数 */
-  gridRows: 8,
+  gridRows: 6,
   /** 每天通过记录最多获得碎片数 */
   dailyRecordPieceCap: 3,
   /** 连续记录奖励间隔（天） */

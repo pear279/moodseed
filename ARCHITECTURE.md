@@ -6,7 +6,7 @@
 | --- | --- | --- |
 | 前端 | React 18 + Vite + TypeScript | 页面与组件 |
 | 样式 | Tailwind CSS | 移动端布局/样式/简单动画 |
-| 视觉 | Three.js（拼图切分/灰彩揭示/倾斜视差/翻牌） | 48 块拼图碎片切分、灰→彩恢复、卡片倾斜视差、完整解锁翻牌 |
+| 视觉 | Three.js（拼图切分/灰彩揭示/倾斜视差/翻牌） | 36 块拼图碎片切分、灰→彩恢复、卡片倾斜视差、完整解锁翻牌 |
 | 路由 | react-router-dom（HashRouter） | SPA 零配置、Pages 无需 `_redirects` |
 | 农历/星座 | lunar-javascript | 黄历宜忌、星座、干支（本地，不调付费 API） |
 | 后端 | Cloudflare Pages Functions（基于 Workers） | 一体化承载 API |
@@ -34,7 +34,7 @@ Cloudflare Pages
 ```
 
 - 用户体系：无登录。首次打开生成 `anonymous_user_id`（UUID）存 LocalStorage 并 upsert 到 D1。
-- 植物拼图视觉：一张完整植物插画（PNG）由 Three.js 切成 6×8 共 48 块碎片（每块 PlaneGeometry 重映射 UV 到子矩形）。锁定块用 ShaderMaterial 输出灰度+压暗（破败感），解锁块恢复彩色；整板跟随指针做轻微倾斜视差，完整解锁时绕 Y 轴翻转一圈。参考纹理见 `references/`。
+- 植物拼图视觉：一张完整植物插画（PNG）由 Three.js 切成 6×6 共 36 块碎片（每块 PlaneGeometry 重映射 UV 到子矩形）。锁定块用 ShaderMaterial 输出灰度+压暗（破败感），解锁块恢复彩色；整板跟随指针做轻微倾斜视差，完整解锁时绕 Y 轴翻转一圈。参考纹理见 `references/`。
 
 > **植物素材**：首批 5 株植物均为 PNG（`public/plants/*.png`），其中「仙人掌」使用用户上传的插画（`references/cactus-plant.png`）；「拼图纹理」参考灰度纹理图（`references/puzzle-texture-reference.png`），锁定态由 Shader 灰度+压暗实现。
 

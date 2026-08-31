@@ -34,7 +34,7 @@
 - [x] 3.6 规则校验：`pnpm test` 冒烟脚本（日3上限/签到幂等/兑换守卫/敏感词/漂流瓶）全绿
 
 ## Phase 4 — 植物拼图核心视觉 ✅（Three.js 实现）
-- [x] 4.1 6×8 切片：Three.js PlaneGeometry + UV 重映射切成 48 块，锁定块灰度+压暗（参考 `references/puzzle-texture-reference.png`），解锁彩色
+- [x] 4.1 6×6 切片：Three.js PlaneGeometry + UV 重映射切成 36 块，锁定块灰度+压暗（参考 `references/puzzle-texture-reference.png`），解锁彩色
 - [x] 4.2 三态渲染：完全未解锁 / 部分恢复 / 完整复苏
 - [x] 4.3 卡片倾斜视差：Three.js 指针跟随 rotateX/rotateY
 - [x] 4.4 碎片恢复动画：Shader `uReveal` 灰→彩逐块点亮 + 「🌱 获得 N 块」反馈
@@ -58,7 +58,7 @@
 - [x] 6.6 推送 GitHub（已 `git init` + 首提交，待创建远端仓库）
 
 ## 验收清单（对照 PRODUCT.md）
-- [x] 核心闭环后端完整跑通（引导→记录→AI→碎片→修复→48块→翻牌→下一株）——API 层已 curl 验证
+- [x] 核心闭环后端完整跑通（引导→记录→AI→碎片→修复→36块→翻牌→下一株）——API 层已 curl 验证
 - [~] 三页 + 引导 UI 浏览器端到端验证（浏览器因切换标签暂停，待恢复）
 - [x] 奖励规则正确（日3 / 7天+3 / 21兑1 / 日5瓶）
 - [ ] Cloudflare 真实部署可访问（待用户账号）

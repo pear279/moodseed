@@ -38,7 +38,7 @@ export interface AwardResult {
 
 /**
  * 向「当前植物」授予 count 块碎片（确定性位置洗牌，同一用户同一株顺序稳定）。
- * 达到 48 块自动标记 completed。
+ * 达到 36 块自动标记 completed。
  */
 export async function awardPieces(db: any, userId: string, count: number): Promise<AwardResult> {
   const all = await db.prepare('SELECT * FROM puzzle_progress WHERE user_id = ?').bind(userId).all()

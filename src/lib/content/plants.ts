@@ -27,7 +27,7 @@ export function getPlantByEmotion(emotionId: string): Plant | undefined {
   return getPlants().find((p) => p.related_emotions.includes(emotionId))
 }
 
-/** 每株植物的拼图块数（首版固定 48） */
+/** 每株植物的拼图块数（首版固定 36，6×6 正方形） */
 export function getPuzzlePieceCount(): number {
-  return getPlants()[0]?.puzzle_piece_count ?? 48
+  return getPlants()[0]?.puzzle_piece_count ?? 36
 }

@@ -131,7 +131,7 @@ export default function MePage() {
       const res = await api.exchange(user.id)
       await refreshUser()
       await load()
-      setToast(`已兑换 1 块碎片，当前植物恢复到 ${res.unlockedCount}/48`)
+      setToast(`已兑换 1 块碎片，当前植物恢复到 ${res.unlockedCount}/${REWARDS.piecesPerPlant}`)
       setTimeout(() => setToast(''), 2600)
     } finally {
       setExchanging(false)

@@ -7,7 +7,7 @@ import type { Plant, PlantProgress, ProgressOverview } from '../lib/types'
 import { PlantPuzzle3D } from '../three/PlantPuzzle3D'
 import { IconBottle, IconLock } from '../components/icons'
 
-const ALL_48 = Array.from({ length: REWARDS.piecesPerPlant }, (_, i) => i)
+const ALL_PIECES = Array.from({ length: REWARDS.piecesPerPlant }, (_, i) => i)
 
 const COLLECTED_KEY = 'moodseed_collected_plants'
 
@@ -162,11 +162,11 @@ export default function PuzzlePage() {
           <div className="w-full max-w-xs animate-pop-in rounded-3xl bg-cream p-6 text-center shadow-glow">
             <div className="mx-auto text-4xl">✨</div>
             <h2 className="mt-3 text-lg font-semibold">植物完整复苏！</h2>
-            <p className="mt-1 text-sm text-ink/60">你已点亮 {celebrate.plant_name} 的全部 48 块拼图。</p>
+            <p className="mt-1 text-sm text-ink/60">你已点亮 {celebrate.plant_name} 的全部 {REWARDS.piecesPerPlant} 块拼图。</p>
 
             {/* 植物卡片（Three.js 翻牌一圈） */}
             <div className="mx-auto mt-5 h-52 w-full">
-              <PlantPuzzle3D image={celebrate.image_path} positions={ALL_48} flip className="h-full w-full" />
+              <PlantPuzzle3D image={celebrate.image_path} positions={ALL_PIECES} flip className="h-full w-full" />
             </div>
 
             <div className="mt-4 text-sm font-medium text-leaf">{celebrate.emotion_theme}</div>

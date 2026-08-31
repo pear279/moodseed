@@ -57,7 +57,7 @@ function remapUv(geo: THREE.PlaneGeometry, u0: number, u1: number, v0: number, v
   uv.needsUpdate = true
 }
 
-export function PlantPuzzle3D({ image, positions, cols = 6, rows = 8, flip = false, className }: Props) {
+export function PlantPuzzle3D({ image, positions, cols = 6, rows = 6, flip = false, className }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const stateRef = useRef<State | null>(null)
   const disposeRef = useRef<(() => void) | null>(null)
@@ -97,7 +97,7 @@ export function PlantPuzzle3D({ image, positions, cols = 6, rows = 8, flip = fal
 
     let texture: THREE.Texture | null = null
 
-    // 纹理加载完成后构建 48 块
+    // 纹理加载完成后构建 36 块（6×6 正方形）
     new THREE.TextureLoader().load(
       image,
       (tex) => {
@@ -109,17 +109,34 @@ export function PlantPuzzle3D({ image, positions, cols = 6, rows = 8, flip = fal
 
         const imgW = tex.image.width || 1
         const imgH = tex.image.height || 1
+        const imgAspect = imgW / imgH
+        // 正方形 1:1 板面
         const boardH = 2.4
-        const boardW = boardH * (imgW / imgH)
+        const boardW = boardH
         const pieceW = boardW / cols
         const pieceH = boardH / rows
 
+        // cover 裁切：把任意比例的插画填满正方形，不拉伸不变形
+        let uMin = 0
+        let uMax = 1
+        let vMin = 0
+        let vMax = 1
+        if (imgAspect >= 1) {
+          const span = 1 / imgAspect
+          uMin = (1 - span) / 2
+          uMax = (1 + span) / 2
+        } else {
+          const span = imgAspect
+          vMin = (1 - span) / 2
+          vMax = (1 + span) / 2
+        }
+
         for (let row = 0; row < rows; row++) {
           for (let col = 0; col < cols; col++) {
-            const u0 = col / cols
-            const u1 = (col + 1) / cols
-            const vTop = 1 - row / rows
-            const vBottom = 1 - (row + 1) / rows
+            const u0 = uMin + (col / cols) * (uMax - uMin)
+            const u1 = uMin + ((col + 1) / cols) * (uMax - uMin)
+            const vTop = vMax - (row / rows) * (vMax - vMin)
+            const vBottom = vMax - ((row + 1) / rows) * (vMax - vMin)
 
             const geo = new THREE.PlaneGeometry(pieceW, pieceH)
             remapUv(geo, u0, u1, vBottom, vTop)

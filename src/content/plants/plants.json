@@ -9,7 +9,7 @@
     "related_cognitive_patterns": ["catastrophizing", "fortune_telling", "mind_reading", "black_white", "should_thinking", "emotional_reasoning"],
     "quote": "有些事情不用现在解决，先让心慢下来。",
     "image_path": "/plants/mint.png",
-    "puzzle_piece_count": 48
+    "puzzle_piece_count": 36
   },
   {
     "id": "cactus_boundary",
@@ -21,7 +21,7 @@
     "related_cognitive_patterns": ["should_thinking", "personalization", "mind_reading", "comparison", "self_labeling", "emotional_reasoning"],
     "quote": "保护自己的边界，也是一种温柔。",
     "image_path": "/plants/cactus.png",
-    "puzzle_piece_count": 48
+    "puzzle_piece_count": 36
   },
   {
     "id": "dandelion_release",
@@ -33,6 +33,6 @@
     "related_cognitive_patterns": ["overgeneralization", "negative_filter", "discount_positive", "self_labeling", "comparison", "black_white", "fortune_telling"],
     "quote": "有些事情可以记得，也可以不再紧紧抓住。",
     "image_path": "/plants/dandelion.png",
-    "puzzle_piece_count": 48
+    "puzzle_piece_count": 36
   }
 ]
