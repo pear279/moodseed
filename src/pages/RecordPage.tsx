@@ -289,6 +289,15 @@ export default function RecordPage() {
         </section>
       )}
 
+      {/* 添加记录入口 */}
+      <button
+        onClick={() => navigate('/compose')}
+        className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-moss/30 py-4 text-moss active:bg-lime/20"
+      >
+        <IconPlus width={22} height={22} />
+        <span className="font-medium">添加记录</span>
+      </button>
+
       {/* 历史手记 */}
       <section className="mt-6">
         <div className="mb-3 flex items-center justify-between">
@@ -331,14 +340,18 @@ export default function RecordPage() {
         </div>
       </section>
 
-      {/* 底部悬浮「+」新增按钮 */}
-      <button
-        onClick={() => navigate('/compose')}
-        aria-label="添加手记"
-        className="fixed bottom-24 right-5 z-30 grid h-14 w-14 place-items-center rounded-full bg-moss text-white shadow-lift active:bg-leaf"
-      >
-        <IconPlus width={26} height={26} />
-      </button>
+      {/* 底部悬浮「+」新增按钮（约束在 app 宽度内） */}
+      <div className="pointer-events-none fixed inset-x-0 bottom-24 z-30">
+        <div className="mx-auto flex max-w-md justify-end px-5">
+          <button
+            onClick={() => navigate('/compose')}
+            aria-label="添加手记"
+            className="pointer-events-auto grid h-14 w-14 place-items-center rounded-full bg-moss text-white shadow-lift active:bg-leaf"
+          >
+            <IconPlus width={26} height={26} />
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
