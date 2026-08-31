@@ -8,7 +8,7 @@ import { CollectionPuzzleBoard } from '../components/puzzle/CollectionPuzzleBoar
 import { Button, Loader, TiltCard } from '@/components/ui'
 import { TextEffect } from '@/components/core'
 import { getPuzzleThemeById } from '../lib/content/puzzles'
-import { IconBottle, IconLock } from '../components/icons'
+import { IconArrowLeft, IconArrowRight, IconBottle, IconLock } from '../components/icons'
 
 const ALL_PIECES = Array.from({ length: REWARDS.piecesPerPlant }, (_, i) => i)
 
@@ -130,6 +130,24 @@ export default function PuzzlePage() {
       </header>
 
       <div className="relative mt-4 flex-1 overflow-hidden">
+        {index > 0 && (
+          <button
+            onClick={() => setIndex((i) => Math.max(i - 1, 0))}
+            className="absolute left-2 top-1/2 z-10 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full bg-white/85 text-ink/60 shadow-card backdrop-blur active:bg-lime/30"
+            aria-label="上一个（已完成）"
+          >
+            <IconArrowLeft width={18} height={18} />
+          </button>
+        )}
+        {index < views.length - 1 && (
+          <button
+            onClick={() => setIndex((i) => Math.min(i + 1, views.length - 1))}
+            className="absolute right-2 top-1/2 z-10 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full bg-white/85 text-ink/60 shadow-card backdrop-blur active:bg-lime/30"
+            aria-label="下一个（待解锁）"
+          >
+            <IconArrowRight width={18} height={18} />
+          </button>
+        )}
         <div
           className="flex h-full transition-transform duration-300"
           style={{ transform: `translateX(-${index * 100}%)` }}
@@ -144,11 +162,11 @@ export default function PuzzlePage() {
         </div>
       </div>
 
-      {/* 左右滑动提示 */}
+      {/* 左右切换提示 */}
       <div className="flex items-center justify-center gap-3 pb-3 text-xs text-ink/30">
-        <span>左滑 · 已完成</span>
+        <span>← 已完成</span>
         <span className="h-1 w-1 rounded-full bg-ink/20" />
-        <span>右滑 · 下一株</span>
+        <span>下一株 →</span>
       </div>
 
       {/* 漂流瓶入口 */}
