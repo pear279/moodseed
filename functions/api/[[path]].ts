@@ -80,13 +80,15 @@ async function userRoutes(env: Env, method: string, segs: string[], request: Req
       .prepare('INSERT INTO users (id) VALUES (?) ON CONFLICT(id) DO NOTHING')
       .bind(id)
       .run()
-    // 初始碎片：用户还没有任何拼图进度时，为第一个植物预置 34 块（再获得 2 块即完成首张拼图）
-    const prog = await db
-      .prepare('SELECT COUNT(*) AS c FROM puzzle_progress WHERE user_id = ?')
-      .bind(id)
+    // 初始碎片：确保第一个植物至少解锁 34 块（覆盖新/旧用户、已有进度用户，幂等）
+    const firstPlant = orderedPlants()[0]
+    const firstProg = await db
+      .prepare('SELECT positions FROM puzzle_progress WHERE user_id = ? AND plant_id = ?')
+      .bind(id, firstPlant.id)
       .first()
-    if (!(prog?.c ?? 0)) {
-      await awardPieces(db, id, REWARDS.initialPiecesPerPlant)
+    const firstCount = firstProg ? parseJson<number[]>(firstProg.positions, []).length : 0
+    if (firstCount < REWARDS.initialPiecesPerPlant) {
+      await awardPieces(db, id, REWARDS.initialPiecesPerPlant - firstCount)
     }
     const row = await db.prepare('SELECT * FROM users WHERE id = ?').bind(id).first()
     return json(row)

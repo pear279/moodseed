@@ -7,7 +7,7 @@ export interface PuzzleStorage {
   removeGame(themeId: string): void
 }
 
-const KEY_PREFIX = 'moodseed_puzzle_game_'
+const KEY_PREFIX = 'moodseed_puzzle_game_v2_'
 
 export class LocalPuzzleStorage implements PuzzleStorage {
   private key(themeId: string): string {
