@@ -114,14 +114,14 @@ export default function PuzzlePage() {
 
   if (loading) {
     return (
-      <div className="grid h-[100dvh] place-items-center">
+      <div className="grid h-full place-items-center">
         <Loader variant="dots" size={40} className="text-moss" label="加载中" />
       </div>
     )
   }
 
   return (
-    <div className="flex h-[100dvh] flex-col pt-3">
+    <div className="flex h-full flex-col pt-3">
       <header className="px-5">
         <TextEffect as="h1" preset="fade-in-blur" className="text-xl font-semibold">
           拼图
@@ -278,7 +278,7 @@ function PlantView({ view, onPlay }: { view: View; onPlay: (plant: Plant) => voi
         </div>
       </div>
 
-      <p className="mt-auto text-center text-sm text-ink/60">「{view.plant.quote}」</p>
+      <p className="mt-2 text-center text-sm text-ink/60">「{view.plant.quote}」</p>
 
       <button
         disabled
