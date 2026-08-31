@@ -80,15 +80,30 @@ async function userRoutes(env: Env, method: string, segs: string[], request: Req
       .prepare('INSERT INTO users (id) VALUES (?) ON CONFLICT(id) DO NOTHING')
       .bind(id)
       .run()
-    // 初始碎片：确保第一个植物至少解锁 34 块（覆盖新/旧用户、已有进度用户，幂等）
+    // 同步碎片进度：目标 = min(初始 34 + 历史已获得, 36)。覆盖新/旧用户、已有记录进度用户，幂等。
+    const earnedRow = await db
+      .prepare('SELECT COALESCE(SUM(piece_awarded), 0) AS c FROM records WHERE user_id = ?')
+      .bind(id)
+      .first()
+    const streakRow = await db
+      .prepare("SELECT COUNT(*) AS c FROM point_transactions WHERE user_id = ? AND reason = 'streak'")
+      .bind(id)
+      .first()
+    const exchangeRow = await db
+      .prepare("SELECT COUNT(*) AS c FROM point_transactions WHERE user_id = ? AND reason = 'exchange'")
+      .bind(id)
+      .first()
+    const earned = (earnedRow?.c ?? 0) + (streakRow?.c ?? 0) * STREAK_PIECES + (exchangeRow?.c ?? 0)
+    const target = Math.min(REWARDS.initialPiecesPerPlant + earned, REWARDS.piecesPerPlant)
+
     const firstPlant = orderedPlants()[0]
     const firstProg = await db
       .prepare('SELECT positions FROM puzzle_progress WHERE user_id = ? AND plant_id = ?')
       .bind(id, firstPlant.id)
       .first()
     const firstCount = firstProg ? parseJson<number[]>(firstProg.positions, []).length : 0
-    if (firstCount < REWARDS.initialPiecesPerPlant) {
-      await awardPieces(db, id, REWARDS.initialPiecesPerPlant - firstCount)
+    if (firstCount < target) {
+      await awardPieces(db, id, target - firstCount)
     }
     const row = await db.prepare('SELECT * FROM users WHERE id = ?').bind(id).first()
     return json(row)
