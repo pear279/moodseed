@@ -49,7 +49,7 @@ describe('LocalPuzzleStorage（Phase 8）', () => {
   it('损坏数据返回 null（不抛异常）', () => {
     const s = new LocalPuzzleStorage()
     s.saveGame(initializeGame('cactus_boundary', mulberry32(1)))
-    store['moodseed_puzzle_game_cactus_boundary'] = '{bad json'
+    store['moodseed_puzzle_game_v2_cactus_boundary'] = '{bad json'
     expect(s.loadGame('cactus_boundary')).toBeNull()
   })
 })
