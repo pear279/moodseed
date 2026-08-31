@@ -18,7 +18,7 @@ void main() {
 }
 `
 
-// 锁定态：灰度 + 压暗（破败感）；解锁态：恢复彩色
+// 锁定态：低饱和灰绿（隐约可见轮廓）；解锁态：恢复彩色
 const FRAG = /* glsl */ `
 uniform sampler2D uTex;
 uniform float uReveal;
@@ -26,7 +26,7 @@ varying vec2 vUv;
 void main() {
   vec4 c = texture2D(uTex, vUv);
   float l = dot(c.rgb, vec3(0.299, 0.587, 0.114));
-  vec3 gray = vec3(l) * 0.58 + vec3(0.03);
+  vec3 gray = mix(vec3(0.22, 0.24, 0.21), vec3(0.60, 0.62, 0.58), l);
   vec3 col = mix(gray, c.rgb, smoothstep(0.0, 1.0, uReveal));
   gl_FragColor = vec4(col, 1.0);
 }
@@ -222,7 +222,7 @@ export function PlantPuzzle3D({ image, positions, cols = 6, rows = 6, flip = fal
       // 揭示动画（灰 → 彩）
       for (const p of state.pieces) {
         const m = p.mat.uniforms.uReveal
-        m.value += (p.target - m.value) * 0.08
+        m.value += (p.target - m.value) * 0.06
         if (Math.abs(p.target - m.value) < 0.002) m.value = p.target
       }
       // 翻牌（绕 Y 一圈）优先于倾斜的 Y 轴

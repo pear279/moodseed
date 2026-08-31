@@ -90,10 +90,10 @@ async function main() {
 
   // 4. 进度（当前株 / locked 状态）
   const prog = await req('GET', `/api/progress?userId=${uid}`)
-  assert(prog.json.currentPlantId === 'mint_calm' && prog.json.nextPlantId === 'cactus_boundary', '当前株 mint_calm，下一株 cactus_boundary')
-  const mint = prog.json.progress.find((p) => p.plant_id === 'mint_calm')
+  assert(prog.json.currentPlantId === 'mushroom_calm' && prog.json.nextPlantId === 'cactus_boundary', '当前株 mushroom_calm，下一株 cactus_boundary')
+  const mint = prog.json.progress.find((p) => p.plant_id === 'mushroom_calm')
   const cactusBoundary = prog.json.progress.find((p) => p.plant_id === 'cactus_boundary')
-  assert(mint.unlocked_count === 3 && mint.status === 'active', 'mint_calm 3 块 active')
+  assert(mint.unlocked_count === 3 && mint.status === 'active', 'mushroom_calm 3 块 active')
   assert(cactusBoundary.status === 'locked', '后续植物 locked')
 
   // 5. 积分兑换守卫（仅 1 分，不足 21）

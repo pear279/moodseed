@@ -156,14 +156,14 @@ export default function MePage() {
         </button>
       </section>
 
-      {/* 核心数据 */}
-      <section className="mt-4 grid grid-cols-3 gap-3">
+      {/* 核心数据（扁平化，弱化卡片感） */}
+      <section className="mt-4 grid grid-cols-3 gap-2.5">
         {[
           { label: '连续记录', value: stats?.streak_days ?? 0, unit: '天' },
           { label: '累计记录', value: stats?.total_days ?? 0, unit: '天' },
           { label: '已解锁植物', value: stats?.plants_unlocked ?? 0, unit: '株' },
         ].map((s) => (
-          <div key={s.label} className="rounded-2xl bg-white p-4 text-center shadow-card">
+          <div key={s.label} className="rounded-2xl bg-white/70 p-3.5 text-center">
             <div className="text-2xl font-semibold text-moss">
               {s.value}
               <span className="ml-0.5 text-xs text-ink/40">{s.unit}</span>
@@ -173,21 +173,34 @@ export default function MePage() {
         ))}
       </section>
 
-      {/* 签到与积分 */}
-      <section className="mt-4 rounded-3xl bg-gradient-to-br from-gold to-[#C9886B] p-5 text-white shadow-card">
-        <div className="text-sm text-white/85">当前积分</div>
-        <div className="mt-1 text-3xl font-semibold">{user?.points ?? 0}</div>
-        <div className="mt-1 text-xs text-white/70">每天签到 +1 · {REWARDS.pointsPerPiece} 积分兑换 1 块碎片</div>
+      {/* 积分（浅色卡，降低视觉权重） */}
+      <section className="mt-4 rounded-3xl bg-[#F5E9DC] p-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="text-xs text-ink/50">当前积分</div>
+            <div className="mt-0.5 text-2xl font-semibold text-[#C9886B]">{user?.points ?? 0}</div>
+          </div>
+          <div className="text-right text-xs text-ink/55">
+            <div>{REWARDS.pointsPerPiece} 积分 = 1 块拼图碎片</div>
+            <div className="mt-1">
+              {canExchange
+                ? '已可兑换'
+                : `还差 ${REWARDS.pointsPerPiece - (user?.points ?? 0)} 积分可兑换`}
+            </div>
+          </div>
+        </div>
       </section>
 
-      {/* 积分兑换 */}
-      <button
-        onClick={doExchange}
-        disabled={!canExchange || exchanging}
-        className="mt-4 w-full rounded-2xl bg-moss py-3.5 font-medium text-white active:bg-leaf disabled:opacity-40"
-      >
-        {exchanging ? '兑换中…' : `兑换 1 块拼图碎片（${REWARDS.pointsPerPiece} 积分）`}
-      </button>
+      {/* 积分兑换：仅积分 ≥21 时显示 */}
+      {canExchange && (
+        <button
+          onClick={doExchange}
+          disabled={exchanging}
+          className="mt-3 w-full rounded-2xl bg-moss py-3 font-medium text-white active:bg-leaf disabled:opacity-40"
+        >
+          {exchanging ? '兑换中…' : `兑换 1 块拼图碎片（${REWARDS.pointsPerPiece} 积分）`}
+        </button>
+      )}
 
       {/* 记录日历 */}
       <section className="mt-6">

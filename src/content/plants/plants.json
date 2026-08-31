@@ -1,14 +1,14 @@
 [
   {
-    "id": "mint_calm",
+    "id": "mushroom_calm",
     "order": 1,
-    "plant_name": "薄荷",
-    "card_name": "薄荷-平静",
+    "plant_name": "蘑菇",
+    "card_name": "蘑菇-平静",
     "emotion_theme": "平静",
     "related_emotions": ["anxious", "nervous", "insecure", "stressed", "irritable", "scared", "overwhelmed", "confused", "tired"],
     "related_cognitive_patterns": ["catastrophizing", "fortune_telling", "mind_reading", "black_white", "should_thinking", "emotional_reasoning"],
     "quote": "有些事情不用现在解决，先让心慢下来。",
-    "image_path": "/plants/mint.png",
+    "image_path": "/plants/mushroom.png",
     "puzzle_piece_count": 36
   },
   {

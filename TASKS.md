@@ -7,7 +7,7 @@
 - [x] 0.2 Cloudflare 基建：`wrangler.jsonc`（D1/R2）+ `functions/` + `migrations/0001_init.sql` + `.dev.vars.example` + `.gitignore`
 - [x] 0.3 静态内容：`data/`（5 株植物、24 情绪、8 认知模式、120 幸运语、24 幸运色）
 - [x] 0.4 `src/lib`：userId、types、api.ts、zodiac、constants
-- [x] 0.5 植物 SVG 插画（仙人掌/蒲公英/向日葵 + 芦荟/常春藤）+ 蜘蛛网 SVG
+- [x] 0.5 植物插画（蘑菇/仙人掌/蒲公英，正方形 1:1）+ 蜘蛛网 SVG
 - [x] 0.6 git init + 首提交
 
 ## Phase 1 — 静态产品骨架 ✅

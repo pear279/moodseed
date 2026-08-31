@@ -90,7 +90,7 @@
       "fortune_telling",
       "mind_reading"
     ],
-    "plant_id": "mint_calm",
+    "plant_id": "mushroom_calm",
     "emoji": "😰"
   },
   {
@@ -104,7 +104,7 @@
       "fortune_telling",
       "mind_reading"
     ],
-    "plant_id": "mint_calm",
+    "plant_id": "mushroom_calm",
     "emoji": "😬"
   },
   {
@@ -117,7 +117,7 @@
       "should_thinking",
       "black_white"
     ],
-    "plant_id": "mint_calm",
+    "plant_id": "mushroom_calm",
     "emoji": "😣"
   },
   {
@@ -130,7 +130,7 @@
       "should_thinking",
       "emotional_reasoning"
     ],
-    "plant_id": "mint_calm",
+    "plant_id": "mushroom_calm",
     "emoji": "😤"
   },
   {
@@ -156,7 +156,7 @@
       "catastrophizing",
       "fortune_telling"
     ],
-    "plant_id": "mint_calm",
+    "plant_id": "mushroom_calm",
     "emoji": "😨"
   },
   {
@@ -169,7 +169,7 @@
       "should_thinking",
       "black_white"
     ],
-    "plant_id": "mint_calm",
+    "plant_id": "mushroom_calm",
     "emoji": "🤯"
   },
   {
@@ -321,7 +321,7 @@
       "fortune_telling",
       "black_white"
     ],
-    "plant_id": "mint_calm",
+    "plant_id": "mushroom_calm",
     "emoji": "😕"
   },
   {
@@ -331,7 +331,7 @@
     "definition": "心理或身体能量下降",
     "category": "self",
     "related_cognitive_patterns": [],
-    "plant_id": "mint_calm",
+    "plant_id": "mushroom_calm",
     "emoji": "😮‍💨"
   }
 ]

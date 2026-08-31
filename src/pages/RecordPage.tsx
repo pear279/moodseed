@@ -47,18 +47,13 @@ function RecordCard({
       )}
 
       {/* 情绪标签 / AI 状态 */}
-      <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+      <div className="mt-2 flex flex-wrap items-center gap-1.5">
         {record.ai_status === 'done' && tags.length > 0 && (
-          <>
-            {tags.map((t) => (
-              <span key={t} className="rounded-full bg-lime/40 px-2 py-0.5 text-xs text-leaf">
-                {t}
-              </span>
-            ))}
-            {record.ai_summary && (
-              <span className="line-clamp-1 text-xs text-ink/40">{record.ai_summary}</span>
-            )}
-          </>
+          tags.map((t) => (
+            <span key={t} className="rounded-full bg-lime/40 px-2 py-0.5 text-xs text-leaf">
+              {t}
+            </span>
+          ))
         )}
         {record.ai_status === 'pending' && (
           <span className="inline-flex items-center gap-1 rounded-full bg-sand/60 px-2 py-0.5 text-xs text-ink/50">
@@ -74,6 +69,11 @@ function RecordCard({
           </button>
         )}
       </div>
+
+      {/* AI 一句话摘要（与正文区分：字号略小、浅灰绿、最多 2 行） */}
+      {record.ai_status === 'done' && record.ai_summary && (
+        <p className="mt-1.5 line-clamp-2 text-xs text-[#7A857A]">{record.ai_summary}</p>
+      )}
 
       {/* 日期 / 更多 */}
       <div className="mt-3 flex items-center justify-between">
@@ -200,7 +200,7 @@ export default function RecordPage() {
   }
 
   return (
-    <div className="px-5 pb-32 pt-6">
+    <div className="px-5 pb-10 pt-6">
       <header className="flex items-end justify-between">
         <div>
           <div className="text-sm text-ink/50">{greeting()}，{user?.nickname}</div>
@@ -238,14 +238,14 @@ export default function RecordPage() {
       {/* 今日幸运卡（常驻卡片位，每日更新） */}
       {checkin?.lucky && (
         <section
-          className={`mt-4 rounded-3xl bg-white p-5 shadow-card ${justChecked ? 'animate-pop-in' : ''}`}
+          className={`mt-4 rounded-3xl bg-white p-4 shadow-card ${justChecked ? 'animate-pop-in' : ''}`}
         >
           <div className="flex items-center justify-between">
             <div className="text-sm font-medium">✨ 今日幸运卡</div>
             <div className="text-xs text-ink/40">{checkin.lucky.date}</div>
           </div>
 
-          <div className="mt-4 grid grid-cols-3 divide-x divide-ink/5 rounded-2xl bg-sand/40 py-3 text-center">
+          <div className="mt-3 grid grid-cols-3 divide-x divide-ink/5 rounded-2xl bg-sand/40 py-2.5 text-center">
             <div className="flex flex-col items-center justify-center gap-1 px-2">
               <span
                 className="h-4 w-4 rounded-full ring-1 ring-ink/10"
@@ -264,12 +264,12 @@ export default function RecordPage() {
             </div>
           </div>
 
-          <p className="mt-4 text-center text-base font-medium leading-relaxed text-ink">
+          <p className="mt-3 text-center text-[15px] font-medium leading-relaxed text-ink">
             {checkin.lucky.daily_message}
           </p>
 
-          <div className="mt-4 grid grid-cols-2 gap-3">
-            <div className="rounded-2xl bg-sand/60 p-3">
+          <div className="mt-3 grid grid-cols-2 gap-2.5">
+            <div className="rounded-2xl bg-sand/60 p-2.5">
               <div className="text-xs font-medium text-leaf">建议</div>
               <div className="mt-1.5 space-y-0.5 text-xs text-ink/70">
                 {checkin.lucky.recommended.map((x) => (
@@ -277,7 +277,7 @@ export default function RecordPage() {
                 ))}
               </div>
             </div>
-            <div className="rounded-2xl bg-sand/60 p-3">
+            <div className="rounded-2xl bg-sand/60 p-2.5">
               <div className="text-xs font-medium text-[#C9886B]">避免</div>
               <div className="mt-1.5 space-y-0.5 text-xs text-ink/70">
                 {checkin.lucky.avoid.map((x) => (
@@ -339,19 +339,6 @@ export default function RecordPage() {
           ))}
         </div>
       </section>
-
-      {/* 底部悬浮「+」新增按钮（约束在 app 宽度内） */}
-      <div className="pointer-events-none fixed inset-x-0 bottom-24 z-30">
-        <div className="mx-auto flex max-w-md justify-end px-5">
-          <button
-            onClick={() => navigate('/compose')}
-            aria-label="添加手记"
-            className="pointer-events-auto grid h-14 w-14 place-items-center rounded-full bg-moss text-white shadow-lift active:bg-leaf"
-          >
-            <IconPlus width={26} height={26} />
-          </button>
-        </div>
-      </div>
     </div>
   )
 }

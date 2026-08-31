@@ -16,7 +16,7 @@ export function TabLayout() {
       <nav className="border-t border-ink/5 bg-cream/95 backdrop-blur pb-safe">
         <div className="grid grid-cols-3">
           {tabs.map(({ to, label, Icon }) => (
-            <NavLink key={to} to={to}>
+            <NavLink key={to} to={to} className="outline-none">
               {({ isActive }) => (
                 <span
                   className={`flex flex-col items-center gap-0.5 py-2.5 text-[11px] transition-colors ${
