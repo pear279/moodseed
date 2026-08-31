@@ -121,15 +121,15 @@ export default function PuzzlePage() {
   }
 
   return (
-    <div className="flex h-[100dvh] flex-col pt-6">
+    <div className="flex h-[100dvh] flex-col pt-3">
       <header className="px-5">
         <TextEffect as="h1" preset="fade-in-blur" className="text-xl font-semibold">
           拼图
         </TextEffect>
-        <p className="mt-0.5 text-xs text-ink/40">每记录一次，植物就恢复一点生命。</p>
+        <p className="text-xs text-ink/40">每记录一次，植物就恢复一点生命。</p>
       </header>
 
-      <div className="relative mt-4 flex-1 overflow-hidden">
+      <div className="relative mt-2 flex-1 overflow-hidden">
         {index > 0 && (
           <button
             onClick={() => setIndex((i) => Math.max(i - 1, 0))}
@@ -155,7 +155,7 @@ export default function PuzzlePage() {
           onTouchEnd={onTouchEnd}
         >
           {views.map((v) => (
-            <div key={v.plant.id} className="h-full w-full shrink-0 px-5 pb-4">
+            <div key={v.plant.id} className="h-full w-full shrink-0 px-5 pb-2">
               <PlantView view={v} onPlay={(plant) => navigate(`/play/${plant.id}`)} />
             </div>
           ))}
@@ -163,17 +163,17 @@ export default function PuzzlePage() {
       </div>
 
       {/* 左右切换提示 */}
-      <div className="flex items-center justify-center gap-3 pb-3 text-xs text-ink/30">
+      <div className="flex items-center justify-center gap-3 pb-1.5 text-xs text-ink/30">
         <span>← 已完成</span>
         <span className="h-1 w-1 rounded-full bg-ink/20" />
         <span>下一株 →</span>
       </div>
 
       {/* 漂流瓶入口 */}
-      <div className="px-5 pb-5">
+      <div className="px-5 pb-3">
         <button
           onClick={() => navigate('/bottle')}
-          className="flex w-full items-center justify-center gap-2 rounded-2xl bg-sand py-3.5 text-sm font-medium text-ink/70 active:bg-lime/30"
+          className="flex w-full items-center justify-center gap-2 rounded-2xl bg-sand py-2.5 text-sm font-medium text-ink/70 active:bg-lime/30"
         >
           <IconBottle width={18} height={18} /> 看看同一株植物的匿名漂流瓶
         </button>
@@ -235,9 +235,9 @@ function PlantView({ view, onPlay }: { view: View; onPlay: (plant: Plant) => voi
   if (view.kind === 'completed') {
     return (
       <div className="flex h-full flex-col items-center justify-center">
-        <TiltCard className="w-full max-w-[280px] bg-white shadow-card">
+        <TiltCard className="w-full max-w-[240px] bg-white shadow-card">
           <img src={view.plant.image_path} alt={view.plant.plant_name} className="aspect-[3/4] w-full object-cover" />
-          <div className="p-4 text-center">
+          <div className="p-3 text-center">
             <div className="text-lg font-semibold">{view.plant.plant_name}</div>
             <div className="mt-1 text-sm font-medium text-leaf">{view.plant.emotion_theme}</div>
             <p className="mt-2 text-sm text-ink/60">「{view.plant.quote}」</p>
@@ -247,7 +247,7 @@ function PlantView({ view, onPlay }: { view: View; onPlay: (plant: Plant) => voi
           </div>
         </TiltCard>
 
-        <Button onClick={() => onPlay(view.plant)} className="mt-4 w-full max-w-[280px]">
+        <Button onClick={() => onPlay(view.plant)} className="mt-3 w-full max-w-[240px]">
           玩拼图
         </Button>
       </div>
@@ -258,7 +258,7 @@ function PlantView({ view, onPlay }: { view: View; onPlay: (plant: Plant) => voi
   const count = view.progress.unlocked_count
   return (
     <div className="flex h-full flex-col">
-      <div className="mb-3 flex items-end justify-between">
+      <div className="mb-2 flex items-end justify-between">
         <div>
           <div className="text-lg font-semibold">{view.plant.plant_name}</div>
           <div className="text-sm text-leaf">{view.plant.emotion_theme}</div>
@@ -276,11 +276,11 @@ function PlantView({ view, onPlay }: { view: View; onPlay: (plant: Plant) => voi
         />
       </div>
 
-      <p className="mt-3 text-center text-sm text-ink/60">「{view.plant.quote}」</p>
+      <p className="mt-2 text-center text-sm text-ink/60">「{view.plant.quote}」</p>
 
       <button
         disabled
-        className="mt-3 flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-full bg-sand py-3 text-sm font-medium text-stone/70"
+        className="mt-2 flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-full bg-sand py-2.5 text-sm font-medium text-stone/70"
       >
         <IconLock width={16} height={16} />
         待解锁
