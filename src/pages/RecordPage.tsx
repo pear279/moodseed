@@ -213,44 +213,44 @@ export default function RecordPage() {
         <div className="text-xs text-ink/40">{todayStr()}</div>
       </header>
 
-      {/* 签到卡片 */}
-      <section className="relative mt-4 overflow-hidden rounded-2xl bg-gradient-to-br from-moss to-leaf p-5 text-white shadow-card">
+      {/* 签到卡片（单行） */}
+      <section className="relative mt-4 overflow-hidden rounded-2xl bg-gradient-to-br from-moss to-leaf px-5 py-3.5 text-white shadow-card">
         <Spotlight className="-top-24 left-0" />
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="text-sm text-white/80">每日签到</div>
-            <div className="mt-0.5 text-xs text-white/60">每天签到 +1 积分</div>
+        <div className="relative flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <IconSparkle width={18} height={18} className="text-white/85" />
+            <div className="flex items-baseline gap-2">
+              <span className="text-sm font-semibold">每日签到</span>
+              <span className="text-xs text-white/60">积分 {user?.points ?? 0}</span>
+            </div>
           </div>
           {checkin?.checked_in ? (
-            <div className="flex items-center gap-1.5 rounded-full bg-white/15 px-4 py-2 text-sm">
-              <IconCheck width={16} height={16} /> 今日已打卡
+            <div className="flex items-center gap-1.5 rounded-full bg-white/15 px-4 py-1.5 text-sm">
+              <IconCheck width={16} height={16} /> 已打卡
             </div>
           ) : (
             <button
               onClick={doCheckin}
               disabled={checkingIn}
-              className="rounded-full bg-white px-5 py-2 text-sm font-medium text-leaf active:bg-lime"
+              className="rounded-full bg-white px-5 py-1.5 text-sm font-medium text-leaf active:bg-lime"
             >
               {checkingIn ? '签到中…' : '今日签到'}
             </button>
           )}
-        </div>
-        <div className="mt-4 flex items-center gap-1 text-xs text-white/70">
-          <IconSparkle width={14} height={14} /> 当前积分 {user?.points ?? 0}
         </div>
       </section>
 
       {/* 今日幸运卡（常驻卡片位，每日更新） */}
       {checkin?.lucky && (
         <section
-          className={`mt-4 rounded-3xl bg-white p-4 shadow-card ${justChecked ? 'animate-pop-in' : ''}`}
+          className={`mt-4 rounded-2xl bg-white p-3.5 shadow-card ${justChecked ? 'animate-pop-in' : ''}`}
         >
           <div className="flex items-center justify-between">
             <div className="text-sm font-medium">✨ 今日幸运卡</div>
             <div className="text-xs text-ink/40">{checkin.lucky.date}</div>
           </div>
 
-          <div className="mt-3 grid grid-cols-3 divide-x divide-ink/5 rounded-2xl bg-sand/40 py-2.5 text-center">
+          <div className="mt-2 grid grid-cols-3 divide-x divide-ink/5 rounded-2xl bg-sand/40 py-2 text-center">
             <div className="flex flex-col items-center justify-center gap-1 px-2">
               <span
                 className="h-4 w-4 rounded-full ring-1 ring-ink/10"
@@ -269,22 +269,22 @@ export default function RecordPage() {
             </div>
           </div>
 
-          <p className="mt-3 text-center text-[15px] font-medium leading-relaxed text-ink">
+          <p className="mt-2 text-center text-sm font-medium leading-relaxed text-ink">
             {checkin.lucky.daily_message}
           </p>
 
-          <div className="mt-3 grid grid-cols-2 gap-2.5">
-            <div className="rounded-2xl bg-sand/60 p-2.5">
+          <div className="mt-2 grid grid-cols-2 gap-2">
+            <div className="rounded-xl bg-sand/60 p-2">
               <div className="text-xs font-medium text-leaf">建议</div>
-              <div className="mt-1.5 space-y-0.5 text-xs text-ink/70">
+              <div className="mt-1 space-y-0.5 text-xs text-ink/70">
                 {checkin.lucky.recommended.map((x) => (
                   <div key={x}>{x}</div>
                 ))}
               </div>
             </div>
-            <div className="rounded-2xl bg-sand/60 p-2.5">
+            <div className="rounded-xl bg-sand/60 p-2">
               <div className="text-xs font-medium text-[#C9886B]">避免</div>
-              <div className="mt-1.5 space-y-0.5 text-xs text-ink/70">
+              <div className="mt-1 space-y-0.5 text-xs text-ink/70">
                 {checkin.lucky.avoid.map((x) => (
                   <div key={x}>{x}</div>
                 ))}

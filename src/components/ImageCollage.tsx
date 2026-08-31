@@ -26,7 +26,7 @@ export function ImageCollage({ images, className = '' }: Props) {
 
   if (n === 1) {
     return (
-      <div className={`aspect-[4/3] ${className}`}>
+      <div className={`aspect-[16/10] ${className}`}>
         <Cell url={images[0]} />
       </div>
     )
@@ -34,7 +34,7 @@ export function ImageCollage({ images, className = '' }: Props) {
 
   if (n === 2) {
     return (
-      <div className={`grid aspect-[4/3] grid-cols-2 gap-1 ${className}`}>
+      <div className={`grid aspect-[16/10] grid-cols-2 gap-1 ${className}`}>
         <Cell url={images[0]} />
         <Cell url={images[1]} />
       </div>
@@ -43,7 +43,7 @@ export function ImageCollage({ images, className = '' }: Props) {
 
   if (n === 3) {
     return (
-      <div className={`grid aspect-[4/3] grid-cols-2 grid-rows-2 gap-1 ${className}`}>
+      <div className={`grid aspect-[16/10] grid-cols-2 grid-rows-2 gap-1 ${className}`}>
         <div className="row-span-2">
           <Cell url={images[0]} />
         </div>
@@ -55,7 +55,7 @@ export function ImageCollage({ images, className = '' }: Props) {
 
   if (n === 4) {
     return (
-      <div className={`grid aspect-square grid-cols-2 grid-rows-2 gap-1 ${className}`}>
+      <div className={`grid aspect-[16/10] grid-cols-2 grid-rows-2 gap-1 ${className}`}>
         <Cell url={images[0]} />
         <Cell url={images[1]} />
         <Cell url={images[2]} />
@@ -67,7 +67,7 @@ export function ImageCollage({ images, className = '' }: Props) {
   // 5~6 张：主图 + 2×2 小图；最多预览 5 张，多余 +N
   const extra = n - 5
   return (
-    <div className={`grid aspect-[4/3] grid-cols-[1.45fr_1fr] gap-1 ${className}`}>
+    <div className={`grid aspect-[16/10] grid-cols-[1.45fr_1fr] gap-1 ${className}`}>
       <div className="h-full w-full">
         <Cell url={images[0]} />
       </div>
