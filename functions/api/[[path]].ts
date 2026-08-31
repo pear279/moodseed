@@ -40,6 +40,7 @@ function serializeRecord(r: any) {
     ...r,
     emotion_tags: parseJson<string[]>(r.emotion_tags, []),
     ai_emotion_tags: parseJson<string[] | null>(r.ai_emotion_tags, null),
+    images: parseJson<string[]>(r.images, []),
   }
 }
 
@@ -192,31 +193,22 @@ async function checkinRoutes(env: Env, method: string, segs: string[], request: 
 }
 
 // ============ 记录 ============
-async function createRecord(env: Env, request: Request) {
+async function createRecord(env: Env, request: Request, waitUntil?: (p: Promise<unknown>) => void) {
   const db = env.DB
   const p = await body(request)
   const userId = p.userId as string
   const content = sanitize(p.content, 5000)
-  if (!userId || !content) return jsonError('内容不能为空')
+  const images = Array.isArray(p.images)
+    ? (p.images as string[]).filter((s) => typeof s === 'string').slice(0, 6)
+    : []
+  if (!userId || (!content && images.length === 0)) return jsonError('至少写一点内容或添加图片')
   const title = p.title ? sanitize(p.title, 60) : null
   const emotionTags = Array.isArray(p.emotionTags) ? (p.emotionTags as string[]).slice(0, 10) : []
-  const imageUrl = typeof p.imageUrl === 'string' ? p.imageUrl : null
-  const analyze = !!p.analyze
+  const analyze = p.analyze !== false
   const today = todayStr()
   const id = uuid()
   const now = nowIso()
-
-  // AI 分析
-  let analysis: Awaited<ReturnType<typeof analyzeRecord>> | null = null
-  let aiStatus = 'skipped'
-  if (analyze) {
-    try {
-      analysis = await analyzeRecord(env, { title: title ?? undefined, content, user_selected_emotions: emotionTags })
-      aiStatus = 'done'
-    } catch {
-      aiStatus = 'failed'
-    }
-  }
+  const aiStatus = analyze ? 'pending' : 'skipped'
 
   // 每日记录碎片（上限 3）
   const capRow = await db
@@ -228,26 +220,10 @@ async function createRecord(env: Env, request: Request) {
   await db
     .prepare(
       `INSERT INTO records
-        (id, user_id, local_date, title, content, image_url, emotion_tags,
-         ai_emotion_tags, ai_summary, ai_reason, ai_suggestion, ai_status, piece_awarded, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        (id, user_id, local_date, title, content, images, emotion_tags, ai_status, piece_awarded, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     )
-    .bind(
-      id,
-      userId,
-      today,
-      title,
-      content,
-      imageUrl,
-      JSON.stringify(emotionTags),
-      analysis ? JSON.stringify(analysis.emotion_tags) : null,
-      analysis?.summary ?? null,
-      analysis?.reason ?? null,
-      analysis?.suggestion ?? null,
-      aiStatus,
-      recordPiece,
-      now,
-    )
+    .bind(id, userId, today, title, content, JSON.stringify(images), JSON.stringify(emotionTags), aiStatus, recordPiece, now)
     .run()
 
   // 连续记录奖励（每 7 天 +3，每天最多触发一次）
@@ -273,16 +249,73 @@ async function createRecord(env: Env, request: Request) {
   const totalPieces = recordPiece + streakPieces
   const award = await awardPieces(db, userId, totalPieces)
 
+  // AI 异步分析（不阻塞保存；失败也不影响记录）
+  if (analyze) waitUntil?.(runAi(env, id))
+
   const row = await db.prepare('SELECT * FROM records WHERE id = ?').bind(id).first()
   return json({
     record: serializeRecord(row),
-    analysis,
+    analysis: null,
     pieceAwarded: totalPieces,
     recordPiece,
     streakPieces,
-    unlockedCount: award?.unlockedCount ?? null,
-    newPositions: award?.newPositions ?? [],
+    unlockedCount: award.unlockedCount,
+    newPositions: award.newPositions,
   })
+}
+
+/** 后台 AI 分析：读记录 → DeepSeek/兜底 → 回写 ai_* 字段 */
+async function runAi(env: Env, recordId: string): Promise<void> {
+  const db = env.DB
+  const row = await db.prepare('SELECT * FROM records WHERE id = ?').bind(recordId).first()
+  if (!row) return
+  try {
+    const analysis = await analyzeRecord(env, {
+      title: row.title ?? undefined,
+      content: row.content,
+      user_selected_emotions: parseJson<string[]>(row.emotion_tags, []),
+    })
+    await db
+      .prepare(
+        'UPDATE records SET ai_emotion_tags = ?, ai_summary = ?, ai_reason = ?, ai_suggestion = ?, ai_status = ? WHERE id = ?',
+      )
+      .bind(JSON.stringify(analysis.emotion_tags), analysis.summary, analysis.reason, analysis.suggestion, 'done', recordId)
+      .run()
+  } catch {
+    await db.prepare("UPDATE records SET ai_status = 'failed' WHERE id = ?").bind(recordId).run()
+  }
+}
+
+/** 更新手记（编辑）：不改动已发放的拼图碎片；内容变化后异步重新分析 */
+async function updateRecord(env: Env, id: string, request: Request, waitUntil?: (p: Promise<unknown>) => void) {
+  const db = env.DB
+  const existing = await db.prepare('SELECT * FROM records WHERE id = ?').bind(id).first()
+  if (!existing) return jsonError('记录不存在', 404)
+  const p = await body(request)
+  const content = sanitize(p.content, 5000)
+  const images = Array.isArray(p.images)
+    ? (p.images as string[]).filter((s) => typeof s === 'string').slice(0, 6)
+    : []
+  if (!content && images.length === 0) return jsonError('至少写一点内容或添加图片')
+  const title = p.title ? sanitize(p.title, 60) : null
+  const emotionTags = Array.isArray(p.emotionTags) ? (p.emotionTags as string[]).slice(0, 10) : []
+  const analyze = p.analyze !== false
+
+  await db
+    .prepare('UPDATE records SET title = ?, content = ?, images = ?, emotion_tags = ?, ai_status = ? WHERE id = ?')
+    .bind(title, content, JSON.stringify(images), JSON.stringify(emotionTags), analyze ? 'pending' : 'skipped', id)
+    .run()
+
+  if (analyze) waitUntil?.(runAi(env, id))
+  const row = await db.prepare('SELECT * FROM records WHERE id = ?').bind(id).first()
+  return json({ record: serializeRecord(row) })
+}
+
+/** 删除手记 */
+async function deleteRecord(env: Env, id: string) {
+  const db = env.DB
+  await db.prepare('DELETE FROM records WHERE id = ?').bind(id).run()
+  return json({ ok: true })
 }
 
 async function computeStreak(db: any, userId: string): Promise<number> {
@@ -301,10 +334,16 @@ async function computeStreak(db: any, userId: string): Promise<number> {
   return streak
 }
 
-async function recordRoutes(env: Env, method: string, segs: string[], request: Request) {
+async function recordRoutes(
+  env: Env,
+  method: string,
+  segs: string[],
+  request: Request,
+  waitUntil?: (p: Promise<unknown>) => void,
+) {
   const db = env.DB
 
-  if (method === 'POST' && segs.length === 1) return createRecord(env, request)
+  if (method === 'POST' && segs.length === 1) return createRecord(env, request, waitUntil)
 
   if (method === 'GET' && segs.length === 1) {
     const userId = new URL(request.url).searchParams.get('userId')
@@ -324,6 +363,9 @@ async function recordRoutes(env: Env, method: string, segs: string[], request: R
       if (!row) return jsonError('记录不存在', 404)
       return json(serializeRecord(row))
     }
+
+    if (method === 'PUT') return updateRecord(env, id, request, waitUntil)
+    if (method === 'DELETE') return deleteRecord(env, id)
 
     if (method === 'POST' && segs[2] === 'analyze') {
       const row = await db.prepare('SELECT * FROM records WHERE id = ?').bind(id).first()
@@ -558,12 +600,14 @@ export async function onRequest(context: any): Promise<Response> {
   const url = new URL(request.url)
   const method = request.method
   const segs = url.pathname.replace(/^\/api\/?/, '').split('/').filter(Boolean)
+  const waitUntil =
+    typeof context.waitUntil === 'function' ? (p: Promise<unknown>) => context.waitUntil(p) : undefined
 
   try {
     if (segs[0] === 'image' && segs[1]) return await serveImage(env, segs.slice(1).join('/'))
     if (segs[0] === 'user') return await userRoutes(env, method, segs, request)
     if (segs[0] === 'checkin') return await checkinRoutes(env, method, segs, request)
-    if (segs[0] === 'records') return await recordRoutes(env, method, segs, request)
+    if (segs[0] === 'records') return await recordRoutes(env, method, segs, request, waitUntil)
     if (segs[0] === 'progress') return await progressRoute(env, request)
     if (segs[0] === 'exchange') return await exchangeRoute(env, request)
     if (segs[0] === 'bottles') return await bottleRoutes(env, method, segs, request)

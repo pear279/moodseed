@@ -23,7 +23,7 @@ export interface RecordItem {
   local_date?: string
   title?: string | null
   content: string
-  image_url?: string | null
+  images: string[]
   emotion_tags: string[]
   ai_emotion_tags?: string[] | null
   ai_summary?: string | null

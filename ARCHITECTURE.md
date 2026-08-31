@@ -47,10 +47,10 @@ users(id TEXT PK, nickname TEXT DEFAULT '小种子', birthday TEXT, mbti TEXT,
       points INTEGER DEFAULT 0, created_at TEXT, updated_at TEXT)
 
 records(id TEXT PK, user_id TEXT, title TEXT, content TEXT NOT NULL,
-        image_url TEXT, emotion_tags TEXT /*JSON*/, ai_emotion_tags TEXT /*JSON*/,
+        images TEXT /*JSON 数组*/, emotion_tags TEXT /*JSON*/, ai_emotion_tags TEXT /*JSON*/,
         ai_summary TEXT, ai_reason TEXT, ai_suggestion TEXT,
         ai_status TEXT /*pending|done|failed|skipped*/, piece_awarded INTEGER,
-        created_at TEXT)
+        local_date TEXT, created_at TEXT)
 
 checkins(id TEXT PK, user_id TEXT, checkin_date TEXT /*YYYY-MM-DD*/,
          points INTEGER, lucky TEXT /*JSON 幸运卡快照*/, created_at TEXT,
@@ -86,10 +86,12 @@ comments(id TEXT PK, bottle_id TEXT, user_id TEXT, content TEXT,
 | GET | `/api/user/:id` | 资料 + 统计（连续/累计天数、解锁植物数、积分） |
 | POST | `/api/checkin` | 签到（幂等/天）+1 分 + 幸运卡 |
 | GET | `/api/checkin/today?userId=` | 今日签到状态 + 幸运卡 |
-| POST | `/api/records` | 创建记录（含 AI 分析触发与碎片奖励） |
+| POST | `/api/records` | 创建记录（同步发放碎片，`waitUntil` 后台跑 AI） |
 | GET | `/api/records?userId=` | 历史记录列表 |
 | GET | `/api/records/:id` | 记录详情 |
-| POST | `/api/records/:id/analyze` | 重新触发 AI 分析 |
+| PUT | `/api/records/:id` | 编辑手记（重新触发 AI） |
+| DELETE | `/api/records/:id` | 删除手记 |
+| POST | `/api/records/:id/analyze` | 手动重新触发 AI 分析 |
 | GET | `/api/progress?userId=` | 全部植物进度（当前/已完成/下一株） |
 | POST | `/api/exchange` | 21 积分兑 1 块 |
 | POST | `/api/upload` | R2 上传（返回图片 URL） |
@@ -101,12 +103,12 @@ comments(id TEXT PK, bottle_id TEXT, user_id TEXT, content TEXT,
 | POST | `/api/bottles/:id/report` | 举报（置 hidden） |
 | DELETE | `/api/bottles/:id` | 删除自己内容（置 deleted） |
 
-> 图片上传：经 `/api/upload` 上传到 R2，图片通过 **Functions 代理**（`GET /api/image/:key` 读 R2 返回）访问，`image_url` 存相对路径 `/api/image/:key`。这样**无需配置 R2 公共桶 / r2.dev 子域 / 自定义域名**，对 demo 更稳、零额外运维（偏离草案「R2 公开 URL」的做法，理由：r2.dev 限速且生产需自定义域名，代理访问同源、免配置）。内容安全：敏感词本地过滤 + 举报置 `hidden` + 删除置 `deleted`。
+> 图片上传：经 `/api/upload` 上传到 R2，图片通过 **Functions 代理**（`GET /api/image/:key` 读 R2 返回）访问，`records.images`（JSON 数组）存相对路径 `/api/image/:key`。这样**无需配置 R2 公共桶 / r2.dev 子域 / 自定义域名**，对 demo 更稳、零额外运维。
 
 ## Key interactions
 
-1. **记录闭环**：提交记录 → 写 `records`（piece_awarded 依当日已奖励数）→ 若当天已奖励 <3 且为有效记录，更新 `puzzle_progress.unlocked_count`/`positions` → 返回新增碎片位置 → 前端播放恢复动画。
-2. **AI 分析**：`/api/records/:id/analyze` → worker 拼 System Prompt（CBT 规则库）+ 用户输入 → 调 DeepSeek → 落库 `ai_*` → 返回四项。失败/无 Key → 本地规则兜底（关键词→情绪标签 + 模板建议）。
+1. **记录闭环（异步 AI）**：提交记录 → 写 `records`（`ai_status=pending`）+ 同步发放碎片（`piece_awarded` 依当日已奖励数）+ 更新 `puzzle_progress` → 立即返回 → `ctx.waitUntil(runAi)` 后台跑 DeepSeek 回写 `ai_*`。AI 失败不影响记录保存与碎片。
+2. **AI 分析**：`runAi` 读记录 → 拼 System Prompt（CBT 内容库 + 安全规则）→ 调 DeepSeek（`deepseek-v4-flash`）→ 回写 `ai_emotion_tags/ai_summary/ai_reason/ai_suggestion` + `ai_status=done/failed`。无 Key → 本地规则兜底。高风险内容（自伤/自杀/他伤）→ 危机兜底回复。
 
 > **DeepSeek 调用要点**（调研确认）：endpoint `{DEEPSEEK_BASE_URL}/chat/completions`，OpenAI 兼容；`model=deepseek-v4-flash`；Non-Thinking 用 `thinking: { type: "disabled" }`；结构化输出用 `response_format: { type: "json_object" }`（Prompt 内必须出现 "json" 字样并给出字段样例）；鉴权 `Authorization: Bearer <key>`。
 3. **签到**：`checkins` 按 `UNIQUE(user_id, checkin_date)` 幂等；+1 分写 `users.points` + `point_transactions`；幸运卡按 `date+userId` 确定性生成（lunar-javascript 取宜忌，hash 取幸运语/色）。

@@ -32,7 +32,7 @@ export interface CreateRecordPayload {
   title?: string
   content: string
   emotionTags: string[]
-  imageUrl?: string
+  images: string[]
   analyze?: boolean
 }
 
@@ -71,6 +71,9 @@ export const api = {
   listRecords: (userId: string) =>
     request<RecordItem[]>(`/api/records?userId=${encodeURIComponent(userId)}`),
   getRecord: (id: string) => request<RecordItem>(`/api/records/${id}`),
+  updateRecord: (id: string, payload: Omit<CreateRecordPayload, 'userId'>) =>
+    request<{ record: RecordItem }>(`/api/records/${id}`, { method: 'PUT', body: JSON.stringify(payload) }),
+  deleteRecord: (id: string) => request<{ ok: boolean }>(`/api/records/${id}`, { method: 'DELETE' }),
   analyzeRecord: (id: string) =>
     request<AiAnalysis>(`/api/records/${id}/analyze`, { method: 'POST' }),
 

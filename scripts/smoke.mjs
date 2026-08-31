@@ -64,13 +64,29 @@ async function main() {
   })
   const r1 = await mk(1)
   assert(r1.json.pieceAwarded === 1 && r1.json.unlockedCount === 1, '第 1 条记录 +1 块')
-  assert(r1.json.record.ai_emotion_tags?.length > 0 && r1.json.record.ai_summary, 'AI 分析返回四项（含兜底）')
+  assert(r1.json.analysis === null && r1.json.record.ai_status === 'pending', 'AI 异步（保存即返回 pending）')
   const r2 = await mk(2)
   const r3 = await mk(3)
   assert(r3.json.unlockedCount === 3, '第 3 条后共 3 块')
   const r4 = await mk(4)
   assert(r4.json.pieceAwarded === 0, '第 4 条不再给碎片（日上限 3）')
   assert(r4.json.unlockedCount === 3, '第 4 条后仍为 3 块')
+
+  // 3.1 AI 后台完成后回写（轮询第 1 条记录）
+  let aiDone = false
+  for (let i = 0; i < 15; i++) {
+    await new Promise((r) => setTimeout(r, 300))
+    const rec = await req('GET', `/api/records/${r1.json.record.id}`)
+    if (rec.json.ai_status !== 'pending') {
+      aiDone = true
+      assert(
+        Array.isArray(rec.json.ai_emotion_tags) && rec.json.ai_emotion_tags.length > 0 && rec.json.ai_summary,
+        'AI 后台分析返回 emotion_tags/summary（兜底）',
+      )
+      break
+    }
+  }
+  assert(aiDone, 'AI 后台分析完成')
 
   // 4. 进度（当前株 / locked 状态）
   const prog = await req('GET', `/api/progress?userId=${uid}`)

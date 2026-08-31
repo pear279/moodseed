@@ -41,6 +41,7 @@ function AppRoutes() {
         <Route path="/me" element={<MePage />} />
       </Route>
       <Route path="/compose" element={<ComposePage />} />
+      <Route path="/compose/:id" element={<ComposePage />} />
       <Route path="/bottle" element={<BottlePage />} />
       <Route path="*" element={<Navigate to={onboarded ? '/record' : '/onboarding'} replace />} />
     </Routes>
