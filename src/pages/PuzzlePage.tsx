@@ -98,8 +98,8 @@ export default function PuzzlePage() {
     const dy = e.changedTouches[0].clientY - touch.current.y
     touch.current = null
     if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy)) return
-    if (dx < 0) setIndex((i) => Math.min(i + 1, views.length - 1))
-    else setIndex((i) => Math.max(i - 1, 0))
+    if (dx < 0) setIndex((i) => Math.max(i - 1, 0))
+    else setIndex((i) => Math.min(i + 1, views.length - 1))
   }
 
   const collect = () => {
@@ -146,9 +146,9 @@ export default function PuzzlePage() {
 
       {/* 左右滑动提示 */}
       <div className="flex items-center justify-center gap-3 pb-3 text-xs text-ink/30">
-        <span>← 已完成的植物</span>
+        <span>左滑 · 已完成</span>
         <span className="h-1 w-1 rounded-full bg-ink/20" />
-        <span>下一株 →</span>
+        <span>右滑 · 下一株</span>
       </div>
 
       {/* 漂流瓶入口 */}

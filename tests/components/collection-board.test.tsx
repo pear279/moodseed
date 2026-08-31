@@ -14,16 +14,18 @@ describe('CollectionPuzzleBoard（Phase 2/3）', () => {
     expect(html).toContain('viewBox="0 0 1200 1200"')
   })
 
-  it('全锁定：不渲染 image（不透露原图），仅占位 path', () => {
+  it('全锁定：每块渲染 5% 透明度底图', () => {
     const html = renderToStaticMarkup(<CollectionPuzzleBoard theme={theme} unlockedIds={new Set()} />)
-    expect(html).not.toContain('<image ')
+    expect(html.match(/<image\b/g)?.length).toBe(36)
+    expect(html).toContain('opacity="0.05"')
     expect(html.match(/<clipPath\b/g)?.length).toBe(36)
   })
 
-  it('部分解锁：image 数量 = 解锁数', () => {
+  it('部分解锁：每块都渲染底图（未解锁 5%、已解锁全彩）', () => {
     const partial = new Set([0, 5, 17])
     const html = renderToStaticMarkup(<CollectionPuzzleBoard theme={theme} unlockedIds={partial} />)
-    expect(html.match(/<image\b/g)?.length).toBe(3)
+    expect(html.match(/<image\b/g)?.length).toBe(36)
+    expect(html).toContain('opacity="0.05"')
   })
 
   it('image 引用对应 clipPath（clip-path url 引用存在）', () => {

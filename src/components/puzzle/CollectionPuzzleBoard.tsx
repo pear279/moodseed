@@ -7,7 +7,7 @@ let boardIdCounter = 0
 
 interface Props {
   theme: PuzzleTheme
-  /** 已解锁拼块 id 集合（0..35）；未解锁显示米白半透明占位，不透露原图 */
+  /** 已解锁拼块 id 集合（0..35）；未解锁块显示 5% 透明度底图 + 轮廓 */
   unlockedIds: ReadonlySet<number>
   className?: string
   /** 是否播放解锁 reveal 动画（默认开启） */
@@ -65,12 +65,20 @@ export function CollectionPuzzleBoard({ theme, unlockedIds, className, reveal = 
                   <path d={p.path} fill="none" stroke="rgba(46,58,46,0.08)" strokeWidth={1} />
                 </>
               ) : (
-                <path
-                  d={p.path}
-                  fill="rgba(248,245,237,0.65)"
-                  stroke="rgba(90,90,90,0.12)"
-                  strokeWidth={1}
-                />
+                <>
+                  {/* 未解锁块：显示 5% 透明度底图（微微可见原图）+ 轮廓 */}
+                  <image
+                    href={theme.imageUrl}
+                    x={-p.correctX}
+                    y={-p.correctY}
+                    width={BOARD_SIZE}
+                    height={BOARD_SIZE}
+                    preserveAspectRatio="xMidYMid slice"
+                    clipPath={`url(#${prefix}-clip-${p.id})`}
+                    opacity={0.05}
+                  />
+                  <path d={p.path} fill="none" stroke="rgba(90,90,90,0.2)" strokeWidth={1} />
+                </>
               )}
             </g>
           )
