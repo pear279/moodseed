@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import emotions from '../../data/emotions.json'
+import { getEmotions } from '../lib/content/emotions'
 import { IconPlus } from './icons'
 
 interface Props {
@@ -9,6 +9,7 @@ interface Props {
 
 export function EmotionPicker({ selected, onChange }: Props) {
   const [custom, setCustom] = useState('')
+  const emotions = getEmotions()
 
   const toggle = (name: string) => {
     if (selected.includes(name)) onChange(selected.filter((t) => t !== name))

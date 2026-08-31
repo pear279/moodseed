@@ -36,11 +36,15 @@ export interface RecordItem {
 
 export interface Plant {
   id: string
-  name: string
-  keyword: string
-  phrase: string
   order: number
-  image: string
+  plant_name: string
+  card_name: string
+  emotion_theme: string
+  related_emotions: string[]
+  related_cognitive_patterns: string[]
+  quote: string
+  image_path: string
+  puzzle_piece_count: number
 }
 
 export interface PlantProgress {
@@ -57,11 +61,13 @@ export interface LuckyColor {
 }
 
 export interface LuckyCard {
-  phrase: string
-  yi: string[]
-  ji: string[]
-  color: LuckyColor
   date: string
+  lucky_color: LuckyColor
+  lucky_numbers: number[]
+  lucky_food: string
+  daily_message: string
+  recommended: string[]
+  avoid: string[]
 }
 
 export interface CheckinToday {

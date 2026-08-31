@@ -162,15 +162,15 @@ export default function PuzzlePage() {
           <div className="w-full max-w-xs animate-pop-in rounded-3xl bg-cream p-6 text-center shadow-glow">
             <div className="mx-auto text-4xl">✨</div>
             <h2 className="mt-3 text-lg font-semibold">植物完整复苏！</h2>
-            <p className="mt-1 text-sm text-ink/60">你已点亮 {celebrate.name} 的全部 48 块拼图。</p>
+            <p className="mt-1 text-sm text-ink/60">你已点亮 {celebrate.plant_name} 的全部 48 块拼图。</p>
 
             {/* 植物卡片（Three.js 翻牌一圈） */}
             <div className="mx-auto mt-5 h-52 w-full">
-              <PlantPuzzle3D image={celebrate.image} positions={ALL_48} flip className="h-full w-full" />
+              <PlantPuzzle3D image={celebrate.image_path} positions={ALL_48} flip className="h-full w-full" />
             </div>
 
-            <div className="mt-4 text-sm font-medium text-leaf">{celebrate.keyword}</div>
-            <p className="mt-1 text-sm text-ink/70">「{celebrate.phrase}」</p>
+            <div className="mt-4 text-sm font-medium text-leaf">{celebrate.emotion_theme}</div>
+            <p className="mt-1 text-sm text-ink/70">「{celebrate.quote}」</p>
 
             <button
               onClick={collect}
@@ -190,12 +190,12 @@ function PlantView({ view }: { view: View }) {
     return (
       <div className="flex h-full flex-col items-center justify-center">
         <div className="relative w-full max-w-[280px]">
-          <img src={view.plant.image} alt="" className="w-full grayscale opacity-40" />
+          <img src={view.plant.image_path} alt="" className="w-full grayscale opacity-40" />
           <div className="absolute inset-0 grid place-items-center">
             <div className="flex flex-col items-center gap-2 rounded-2xl bg-ink/50 px-6 py-4 text-white backdrop-blur">
               <IconLock width={22} height={22} />
               <span className="text-sm">待解锁</span>
-              <span className="text-lg font-semibold">{view.plant.name}</span>
+              <span className="text-lg font-semibold">{view.plant.plant_name}</span>
             </div>
           </div>
         </div>
@@ -208,11 +208,11 @@ function PlantView({ view }: { view: View }) {
     return (
       <div className="flex h-full flex-col items-center justify-center">
         <div className="w-full max-w-[280px] overflow-hidden rounded-3xl bg-white shadow-card">
-          <img src={view.plant.image} alt={view.plant.name} className="aspect-[3/4] w-full object-cover" />
+          <img src={view.plant.image_path} alt={view.plant.plant_name} className="aspect-[3/4] w-full object-cover" />
           <div className="p-4 text-center">
-            <div className="text-lg font-semibold">{view.plant.name}</div>
-            <div className="mt-1 text-sm font-medium text-leaf">{view.plant.keyword}</div>
-            <p className="mt-2 text-sm text-ink/60">「{view.plant.phrase}」</p>
+            <div className="text-lg font-semibold">{view.plant.plant_name}</div>
+            <div className="mt-1 text-sm font-medium text-leaf">{view.plant.emotion_theme}</div>
+            <p className="mt-2 text-sm text-ink/60">「{view.plant.quote}」</p>
             <div className="mt-3 text-xs text-ink/40">
               已完成 · {view.progress.completed_at?.slice(0, 10)}
             </div>
@@ -228,8 +228,8 @@ function PlantView({ view }: { view: View }) {
     <div className="flex h-full flex-col">
       <div className="mb-3 flex items-end justify-between">
         <div>
-          <div className="text-lg font-semibold">{view.plant.name}</div>
-          <div className="text-sm text-leaf">{view.plant.keyword}</div>
+          <div className="text-lg font-semibold">{view.plant.plant_name}</div>
+          <div className="text-sm text-leaf">{view.plant.emotion_theme}</div>
         </div>
         <div className="text-sm text-ink/50">
           {count} / {REWARDS.piecesPerPlant}
@@ -238,14 +238,14 @@ function PlantView({ view }: { view: View }) {
 
       <div className="flex-1">
         <PlantPuzzle3D
-          image={view.plant.image}
+          image={view.plant.image_path}
           positions={view.progress.positions}
           flip={count >= REWARDS.piecesPerPlant}
           className="h-full w-full"
         />
       </div>
 
-      <p className="mt-3 text-center text-sm text-ink/60">「{view.plant.phrase}」</p>
+      <p className="mt-3 text-center text-sm text-ink/60">「{view.plant.quote}」</p>
     </div>
   )
 }

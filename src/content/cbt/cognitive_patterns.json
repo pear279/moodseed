@@ -1,0 +1,265 @@
+[
+  {
+    "id": "catastrophizing",
+    "name": "灾难化",
+    "english": "Catastrophizing",
+    "description": "自动把事情推向最糟糕的结果，并高估严重结果发生的概率。",
+    "common_expressions": [
+      "这次没做好，以后肯定完了。",
+      "要是出了这个问题，一切都会毁掉。",
+      "我感觉后果会特别严重。"
+    ],
+    "related_emotions": ["anxious", "scared", "nervous"],
+    "interventions": [
+      "区分「可能发生」和「一定发生」。",
+      "分别考虑最坏、最好和最可能出现的结果。",
+      "思考即使结果不理想，自己有哪些应对方式。"
+    ],
+    "reflection_questions": [
+      "我担心的事情现在已经发生了吗？",
+      "最可能发生的情况是什么？",
+      "即使真的出现问题，我能做些什么？"
+    ]
+  },
+  {
+    "id": "black_white",
+    "name": "非黑即白",
+    "english": "Black-and-White Thinking",
+    "description": "只用成功 / 失败、好 / 坏等极端标准判断事情。",
+    "common_expressions": [
+      "没有做到最好，就是失败。",
+      "要么做到完美，要么就没有意义。"
+    ],
+    "related_emotions": ["stressed", "overwhelmed", "confused", "disappointed", "ashamed"],
+    "interventions": [
+      "把二选一判断改成连续刻度。",
+      "例如用 0～10 分评价完成程度。",
+      "同时寻找「做得不错」和「仍可改进」的部分。"
+    ],
+    "reflection_questions": [
+      "这件事有没有介于成功和失败之间的状态？",
+      "哪些部分其实已经做得不错？",
+      "如果满分 10 分，这次大约完成了几分？"
+    ]
+  },
+  {
+    "id": "overgeneralization",
+    "name": "过度概括",
+    "english": "Overgeneralization",
+    "description": "根据一次或少数几次经历，对自己或未来形成全面判断。",
+    "common_expressions": [
+      "我每次都这样。",
+      "我永远做不好。",
+      "以后肯定还是一样。"
+    ],
+    "related_emotions": ["sad", "helpless", "frustrated"],
+    "interventions": [
+      "主动寻找反例。",
+      "把「我总是……」改写成「这一次……」。",
+      "把事件和长期自我评价分开。"
+    ],
+    "reflection_questions": [
+      "真的是每一次都这样吗？",
+      "有没有至少一次情况有所不同？",
+      "这次经历能代表所有未来吗？"
+    ]
+  },
+  {
+    "id": "mind_reading",
+    "name": "读心",
+    "english": "Mind Reading",
+    "description": "缺乏直接证据时，提前认定别人正在负面评价自己。",
+    "common_expressions": [
+      "他们肯定觉得我很差。",
+      "他一定对我失望了。",
+      "大家应该都觉得我很尴尬。"
+    ],
+    "related_emotions": ["anxious", "angry", "wronged", "lonely", "insecure"],
+    "interventions": [
+      "区分事实和猜测。",
+      "把「他觉得我……」改成「我担心他可能觉得……」。",
+      "寻找其他合理解释。"
+    ],
+    "reflection_questions": [
+      "我有什么直接证据？",
+      "有没有其他可能的解释？",
+      "如果我没有猜别人心里怎么想，已知事实是什么？"
+    ]
+  },
+  {
+    "id": "fortune_telling",
+    "name": "预测未来",
+    "english": "Fortune Telling",
+    "description": "因为担心一个结果，就逐渐把它当成未来一定会发生。",
+    "common_expressions": [
+      "我肯定会失败。",
+      "这件事最后一定会很糟。",
+      "我已经知道结果不会好。"
+    ],
+    "related_emotions": ["anxious", "nervous", "scared", "confused", "helpless"],
+    "interventions": [
+      "把预测改写为可能性。",
+      "用概率思考代替确定性判断。",
+      "把注意力重新放到当下可以行动的部分。"
+    ],
+    "reflection_questions": [
+      "我是在描述事实，还是预测未来？",
+      "如果估一个概率，会是多少？",
+      "今天我真正能够控制什么？"
+    ]
+  },
+  {
+    "id": "negative_filter",
+    "name": "消极过滤",
+    "english": "Negative Filtering",
+    "description": "注意力集中在负面部分，忽视同时存在的积极信息。",
+    "common_expressions": [
+      "其他都做好了，但这里失败了，所以整体还是很差。",
+      "别人夸我的地方都不重要。"
+    ],
+    "related_emotions": ["sad", "disappointed", "lonely"],
+    "interventions": [
+      "写下一个没做好的部分。",
+      "同时写下两个已经完成或做得不错的部分。",
+      "尝试从第三方视角重新评价结果。"
+    ],
+    "reflection_questions": [
+      "如果朋友得到同样结果，我会怎么评价他？",
+      "今天有没有一件我做得还不错的事情？",
+      "我是不是只盯着最差的那个部分？"
+    ]
+  },
+  {
+    "id": "discount_positive",
+    "name": "否定积极",
+    "english": "Discounting the Positive",
+    "description": "好事情发生时，很快解释为运气、偶然或「不算什么」。",
+    "common_expressions": [
+      "这次只是运气好。",
+      "谁来都能做到。",
+      "别人夸我只是客气。"
+    ],
+    "related_emotions": ["frustrated", "sad"],
+    "interventions": [
+      "同时考虑外部条件和自己的贡献。",
+      "具体写下为了结果做过什么准备。",
+      "尝试像认可朋友一样认可自己。"
+    ],
+    "reflection_questions": [
+      "为了这个结果，我具体做过哪些事情？",
+      "如果这是朋友取得的成果，我会不会认可他？",
+      "真的完全和我的努力无关吗？"
+    ]
+  },
+  {
+    "id": "should_thinking",
+    "name": "应该思维",
+    "english": "Should Statements",
+    "description": "习惯用「我必须」「我应该」给自己或别人设置僵硬要求。",
+    "common_expressions": [
+      "我应该一直表现得很好。",
+      "我必须让所有人满意。",
+      "我不能犯错。"
+    ],
+    "related_emotions": ["stressed", "irritable", "angry", "overwhelmed", "guilty"],
+    "interventions": [
+      "把「我必须」改成「我希望」。",
+      "把绝对要求改成偏好。",
+      "思考这个标准是否现实。"
+    ],
+    "reflection_questions": [
+      "这个「应该」是谁规定的？",
+      "没达到这个要求，真的意味着我不好吗？",
+      "如果是朋友遇到相同情况，我会要求他做到这么严格吗？"
+    ]
+  },
+  {
+    "id": "personalization",
+    "name": "过度归因自己",
+    "english": "Personalization",
+    "description": "面对复杂事件，把责任几乎全部放到自己身上。",
+    "common_expressions": [
+      "一定都是我的问题。",
+      "他们不开心肯定是因为我。",
+      "如果我做得更好，就不会发生这些事。"
+    ],
+    "related_emotions": ["guilty", "wronged"],
+    "interventions": [
+      "列出自己的因素。",
+      "列出他人的因素。",
+      "列出环境因素。",
+      "重新分配责任比例。"
+    ],
+    "reflection_questions": [
+      "这件事完全由我控制吗？",
+      "还有哪些因素参与了结果？",
+      "我承担的责任真的有 100% 吗？"
+    ]
+  },
+  {
+    "id": "self_labeling",
+    "name": "自我贴标签",
+    "english": "Self Labeling",
+    "description": "从一次行为或结果，直接推导出对整个人的负面评价。",
+    "common_expressions": [
+      "我就是一个失败的人。",
+      "我真没用。",
+      "我就是很差劲。"
+    ],
+    "related_emotions": ["ashamed", "frustrated"],
+    "interventions": [
+      "只描述具体行为和事件。",
+      "把「我是……」改成「这件事我……」。",
+      "区分行为结果和完整自我价值。"
+    ],
+    "reflection_questions": [
+      "我是在评价一件事，还是评价整个自己？",
+      "一次失败能够代表一个完整的人吗？",
+      "有没有其他经历能说明我并不只有这一面？"
+    ]
+  },
+  {
+    "id": "emotional_reasoning",
+    "name": "情绪推理",
+    "english": "Emotional Reasoning",
+    "description": "因为自己感觉如此，就认为事实一定如此。",
+    "common_expressions": [
+      "我觉得自己不行，所以我真的不行。",
+      "我很害怕，所以这件事一定很危险。",
+      "我觉得他们不喜欢我，所以一定是真的。"
+    ],
+    "related_emotions": ["irritable", "angry"],
+    "interventions": [
+      "分开写「我的感受」和「已知事实」。",
+      "承认情绪真实，同时检查事实证据。",
+      "给情绪留空间，但暂缓作结论。"
+    ],
+    "reflection_questions": [
+      "我的感受是真实的，但它是否等于事实？",
+      "如果暂时放下情绪，还有哪些事实？",
+      "有没有证据支持另一个解释？"
+    ]
+  },
+  {
+    "id": "comparison",
+    "name": "过度比较",
+    "english": "Excessive Comparison",
+    "description": "过度依赖与他人的比较衡量自己的进度和价值。",
+    "common_expressions": [
+      "别人都比我进步得快。",
+      "她做得这么好，我显得特别差。",
+      "大家都比我厉害。"
+    ],
+    "related_emotions": ["jealous", "insecure"],
+    "interventions": [
+      "改成比较今天的自己和过去的自己。",
+      "识别自己与他人的起点、资源和目标差异。",
+      "把注意力重新放回自己的下一步行动。"
+    ],
+    "reflection_questions": [
+      "我和对方拥有完全一样的起点和条件吗？",
+      "如果只和一个月前的自己比较，我有什么变化？",
+      "对方的进度真的能定义我的价值吗？"
+    ]
+  }
+]

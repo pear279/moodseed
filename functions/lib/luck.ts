@@ -1,38 +1,12 @@
-import { Solar } from 'lunar-javascript'
-import phrases from '../../data/lucky-phrases.json'
-import colors from '../../data/lucky-colors.json'
-import { hashStr, todayStr } from './util'
+import { generateFortune, type FortuneCard } from '../../src/lib/content/fortune'
+import { todayStr } from './util'
 
-export interface LuckyCard {
-  phrase: string
-  yi: string[]
-  ji: string[]
-  color: { name: string; hex: string }
-  date: string
-}
-
-function almanac(d: Date): { yi: string[]; ji: string[] } {
-  try {
-    const solar = Solar.fromYmd(d.getFullYear(), d.getMonth() + 1, d.getDate())
-    const lunar = solar.getLunar()
-    return {
-      yi: (lunar.getDayYi() || []).slice(0, 3),
-      ji: (lunar.getDayJi() || []).slice(0, 3),
-    }
-  } catch {
-    return { yi: [], ji: [] }
-  }
-}
+export type LuckyCard = FortuneCard
 
 /**
- * 每日幸运卡：按 日期 + userId 确定性生成（同人同天刷新不变）。
- * 宜忌来自黄历（lunar-javascript，按日期）；幸运语/幸运色按日期+用户哈希。
+ * 每日幸运卡：date + anonymous_user_id 确定性生成。
+ * 同一用户同一天刷新结果一致，第二天重新生成；不调用 AI。
  */
-export function buildLuckyCard(userId: string, d = new Date()): LuckyCard {
-  const date = todayStr()
-  const seed = hashStr(`${date}:${userId}`)
-  const phrase = phrases[seed % phrases.length]
-  const color = colors[(seed >>> 8) % colors.length]
-  const { yi, ji } = almanac(d)
-  return { phrase, yi, ji, color, date }
+export function buildLuckyCard(userId: string): LuckyCard {
+  return generateFortune(todayStr(), userId)
 }

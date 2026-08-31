@@ -1,19 +1,10 @@
-import plantsData from '../../data/plants.json'
+import { getPlants, getPuzzlePieceCount, type Plant } from '../../src/lib/content/plants'
 import { nowIso, parseJson, seededShuffle } from './util'
 
-export const PLANTS = plantsData as {
-  id: string
-  name: string
-  keyword: string
-  phrase: string
-  order: number
-  image: string
-}[]
+export const PIECES = getPuzzlePieceCount()
 
-export const PIECES = 48
-
-export function orderedPlants() {
-  return [...PLANTS].sort((a, b) => a.order - b.order)
+export function orderedPlants(): Plant[] {
+  return getPlants()
 }
 
 export interface ProgressRow {
@@ -25,7 +16,7 @@ export interface ProgressRow {
   completed_at: string | null
 }
 
-/** 当前植物 = 第一株未完成的植物（顺序成长路线） */
+/** 当前植物 = 第一株未完成的植物（顺序成长路线，不随单条情绪切换） */
 export function currentPlantOf(rows: ProgressRow[]): string {
   const completed = new Set(rows.filter((r) => r.status === 'completed').map((r) => r.plant_id))
   const ordered = orderedPlants()

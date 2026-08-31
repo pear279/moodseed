@@ -40,8 +40,17 @@ async function main() {
   // 2. 签到（幂等）
   const c1 = await req('POST', '/api/checkin', { userId: uid })
   assert(c1.json.checked_in && c1.json.points === 1, '首次签到 +1 积分')
-  assert(c1.json.lucky && c1.json.lucky.phrase && c1.json.lucky.color.hex, '幸运卡含幸运语/幸运色')
-  assert(Array.isArray(c1.json.lucky.yi) && Array.isArray(c1.json.lucky.ji), '幸运卡含黄历宜忌')
+  assert(c1.json.lucky && c1.json.lucky.lucky_color?.hex && c1.json.lucky.daily_message, '幸运卡含幸运色/幸运语')
+  assert(
+    Array.isArray(c1.json.lucky.lucky_numbers) && c1.json.lucky.lucky_numbers.length === 2,
+    '幸运卡含 2 个幸运数字',
+  )
+  assert(c1.json.lucky.lucky_food, '幸运卡含幸运食物')
+  assert(
+    Array.isArray(c1.json.lucky.recommended) && c1.json.lucky.recommended.length === 2,
+    '幸运卡建议 2 条',
+  )
+  assert(Array.isArray(c1.json.lucky.avoid) && c1.json.lucky.avoid.length === 2, '幸运卡避免 2 条')
   const c2 = await req('POST', '/api/checkin', { userId: uid })
   assert(c2.json.points === 1, '重复签到不重复加分（幂等）')
 
@@ -65,11 +74,11 @@ async function main() {
 
   // 4. 进度（当前株 / locked 状态）
   const prog = await req('GET', `/api/progress?userId=${uid}`)
-  assert(prog.json.currentPlantId === 'cactus' && prog.json.nextPlantId === 'dandelion', '当前株 cactus，下一株 dandelion')
-  const cactus = prog.json.progress.find((p) => p.plant_id === 'cactus')
-  const dandelion = prog.json.progress.find((p) => p.plant_id === 'dandelion')
-  assert(cactus.unlocked_count === 3 && cactus.status === 'active', 'cactus 3 块 active')
-  assert(dandelion.status === 'locked', '后续植物 locked')
+  assert(prog.json.currentPlantId === 'mint_calm' && prog.json.nextPlantId === 'cactus_boundary', '当前株 mint_calm，下一株 cactus_boundary')
+  const mint = prog.json.progress.find((p) => p.plant_id === 'mint_calm')
+  const cactusBoundary = prog.json.progress.find((p) => p.plant_id === 'cactus_boundary')
+  assert(mint.unlocked_count === 3 && mint.status === 'active', 'mint_calm 3 块 active')
+  assert(cactusBoundary.status === 'locked', '后续植物 locked')
 
   // 5. 积分兑换守卫（仅 1 分，不足 21）
   const ex = await req('POST', '/api/exchange', { userId: uid })
@@ -80,13 +89,13 @@ async function main() {
   await req('POST', '/api/user', { id: uid2 })
   const pub = await req('POST', '/api/bottles', {
     userId: uid,
-    plantId: 'cactus',
+    plantId: 'cactus_boundary',
     content: '今天第一次拒绝了一件不想做的事，有点紧张但也轻松。',
     emotionTags: ['紧张'],
   })
   assert(pub.status === 200 && pub.json.id, '发布漂流瓶')
-  const rnd = await req('GET', `/api/bottles/random?userId=${uid2}&plantId=cactus`)
-  assert(rnd.json && rnd.json.plant_id === 'cactus' && typeof rnd.json.content === 'string', '他人随机捞到瓶子（同植物、有内容）')
+  const rnd = await req('GET', `/api/bottles/random?userId=${uid2}&plantId=cactus_boundary`)
+  assert(rnd.json && rnd.json.plant_id === 'cactus_boundary' && typeof rnd.json.content === 'string', '他人随机捞到瓶子（同植物、有内容）')
   const like = await req('POST', `/api/bottles/${pub.json.id}/like`, { userId: uid2 })
   assert(like.json.liked === true && like.json.likes_count === 1, '点赞 +1')
   const cmt = await req('POST', `/api/bottles/${pub.json.id}/comments`, { userId: uid2, content: '你做得很好' })

@@ -33,12 +33,11 @@ Moodseed 是一款以 **情绪记录 + 认知行为疗法(CBT) + 植物拼图成
 ```
 moodseed/
 ├── PRODUCT.md / ARCHITECTURE.md / TASKS.md / AGENTS.md   # 产品与技术文档
-├── src/                  # React 前端
+├── src/                  # React 前端 + 内容知识库（content/）与读取层（lib/content/）
 ├── functions/            # Pages Functions（API + D1/R2/DeepSeek）
 ├── migrations/           # D1 迁移 SQL
-├── data/                 # 静态内容（植物/情绪/CBT/幸运卡）
 ├── public/               # 植物插画 PNG 等静态资源
-├── references/           # 原始素材（植物插画、拼图纹理参考）
+├── references/           # 原始素材（内容库 Markdown、植物/纹理参考图）
 └── wrangler.jsonc        # Cloudflare 绑定配置
 ```
 

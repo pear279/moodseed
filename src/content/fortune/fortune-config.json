@@ -1,0 +1,10 @@
+{
+  "lucky_number_min": 1,
+  "lucky_number_max": 9,
+  "lucky_number_count": 2,
+  "recommended_count": 2,
+  "avoid_count": 2,
+  "seed_algorithm": "date + ':' + anonymous_user_id 的 FNV-1a 哈希 + mulberry32 伪随机",
+  "stability": "同一用户同一天结果固定，第二天重新生成",
+  "no_ai": true
+}

@@ -1,0 +1,337 @@
+[
+  {
+    "id": "happy",
+    "name": "开心",
+    "english": "Happy",
+    "definition": "感受到愉快和积极",
+    "category": "positive",
+    "related_cognitive_patterns": [],
+    "plant_id": null,
+    "emoji": "😊"
+  },
+  {
+    "id": "excited",
+    "name": "兴奋",
+    "english": "Excited",
+    "definition": "因期待或好消息产生较高能量",
+    "category": "positive",
+    "related_cognitive_patterns": [],
+    "plant_id": null,
+    "emoji": "🤩"
+  },
+  {
+    "id": "calm",
+    "name": "平静",
+    "english": "Calm",
+    "definition": "内心稳定，没有明显紧张感",
+    "category": "positive",
+    "related_cognitive_patterns": [],
+    "plant_id": null,
+    "emoji": "😌"
+  },
+  {
+    "id": "relaxed",
+    "name": "放松",
+    "english": "Relaxed",
+    "definition": "身心压力有所下降",
+    "category": "positive",
+    "related_cognitive_patterns": [],
+    "plant_id": null,
+    "emoji": "🌿"
+  },
+  {
+    "id": "satisfied",
+    "name": "满足",
+    "english": "Satisfied",
+    "definition": "对当前状态或结果感到满意",
+    "category": "positive",
+    "related_cognitive_patterns": [],
+    "plant_id": null,
+    "emoji": "🙂"
+  },
+  {
+    "id": "grateful",
+    "name": "感激",
+    "english": "Grateful",
+    "definition": "感受到他人、生活或经历带来的善意",
+    "category": "positive",
+    "related_cognitive_patterns": [],
+    "plant_id": null,
+    "emoji": "🙏"
+  },
+  {
+    "id": "hopeful",
+    "name": "期待",
+    "english": "Hopeful",
+    "definition": "对接下来可能发生的事情抱有积极预期",
+    "category": "positive",
+    "related_cognitive_patterns": [],
+    "plant_id": null,
+    "emoji": "✨"
+  },
+  {
+    "id": "proud",
+    "name": "自豪",
+    "english": "Proud",
+    "definition": "对自己的行为或成果产生认可",
+    "category": "positive",
+    "related_cognitive_patterns": [],
+    "plant_id": null,
+    "emoji": "🎉"
+  },
+  {
+    "id": "anxious",
+    "name": "焦虑",
+    "english": "Anxious",
+    "definition": "对未来不确定性产生担忧",
+    "category": "stress",
+    "related_cognitive_patterns": [
+      "catastrophizing",
+      "fortune_telling",
+      "mind_reading"
+    ],
+    "plant_id": "mint_calm",
+    "emoji": "😰"
+  },
+  {
+    "id": "nervous",
+    "name": "紧张",
+    "english": "Nervous",
+    "definition": "面对具体事情时感到不安",
+    "category": "stress",
+    "related_cognitive_patterns": [
+      "catastrophizing",
+      "fortune_telling",
+      "mind_reading"
+    ],
+    "plant_id": "mint_calm",
+    "emoji": "😬"
+  },
+  {
+    "id": "stressed",
+    "name": "压力",
+    "english": "Stressed",
+    "definition": "感到事情、责任或要求超出当前承受范围",
+    "category": "stress",
+    "related_cognitive_patterns": [
+      "should_thinking",
+      "black_white"
+    ],
+    "plant_id": "mint_calm",
+    "emoji": "😣"
+  },
+  {
+    "id": "irritable",
+    "name": "烦躁",
+    "english": "Irritable",
+    "definition": "容易不耐烦或被小事情影响",
+    "category": "stress",
+    "related_cognitive_patterns": [
+      "should_thinking",
+      "emotional_reasoning"
+    ],
+    "plant_id": "mint_calm",
+    "emoji": "😤"
+  },
+  {
+    "id": "angry",
+    "name": "愤怒",
+    "english": "Angry",
+    "definition": "感觉自己的需求、边界或公平受到侵犯",
+    "category": "stress",
+    "related_cognitive_patterns": [
+      "should_thinking",
+      "mind_reading"
+    ],
+    "plant_id": "cactus_boundary",
+    "emoji": "😠"
+  },
+  {
+    "id": "scared",
+    "name": "害怕",
+    "english": "Afraid",
+    "definition": "对可能的危险、失败或损失产生担忧",
+    "category": "stress",
+    "related_cognitive_patterns": [
+      "catastrophizing",
+      "fortune_telling"
+    ],
+    "plant_id": "mint_calm",
+    "emoji": "😨"
+  },
+  {
+    "id": "overwhelmed",
+    "name": "不堪重负",
+    "english": "Overwhelmed",
+    "definition": "同时面对太多事情而难以处理",
+    "category": "stress",
+    "related_cognitive_patterns": [
+      "should_thinking",
+      "black_white"
+    ],
+    "plant_id": "mint_calm",
+    "emoji": "🤯"
+  },
+  {
+    "id": "sad",
+    "name": "难过",
+    "english": "Sad",
+    "definition": "因失去、受挫或不如预期而低落",
+    "category": "low",
+    "related_cognitive_patterns": [
+      "negative_filter",
+      "overgeneralization"
+    ],
+    "plant_id": "dandelion_release",
+    "emoji": "😢"
+  },
+  {
+    "id": "disappointed",
+    "name": "失望",
+    "english": "Disappointed",
+    "definition": "现实与原本期待产生落差",
+    "category": "low",
+    "related_cognitive_patterns": [
+      "black_white",
+      "negative_filter"
+    ],
+    "plant_id": "dandelion_release",
+    "emoji": "😞"
+  },
+  {
+    "id": "lonely",
+    "name": "孤独",
+    "english": "Lonely",
+    "definition": "感到缺乏连接、理解或陪伴",
+    "category": "low",
+    "related_cognitive_patterns": [
+      "mind_reading",
+      "negative_filter"
+    ],
+    "plant_id": "dandelion_release",
+    "emoji": "🌧️"
+  },
+  {
+    "id": "helpless",
+    "name": "无力",
+    "english": "Helpless",
+    "definition": "感觉自己很难改变目前的情况",
+    "category": "low",
+    "related_cognitive_patterns": [
+      "overgeneralization",
+      "fortune_telling"
+    ],
+    "plant_id": "dandelion_release",
+    "emoji": "🥀"
+  },
+  {
+    "id": "frustrated",
+    "name": "挫败",
+    "english": "Frustrated",
+    "definition": "努力后仍未达到目标",
+    "category": "low",
+    "related_cognitive_patterns": [
+      "self_labeling",
+      "overgeneralization"
+    ],
+    "plant_id": "dandelion_release",
+    "emoji": "😩"
+  },
+  {
+    "id": "empty",
+    "name": "空落",
+    "english": "Empty",
+    "definition": "缺乏明确情绪但感到空缺",
+    "category": "low",
+    "related_cognitive_patterns": [],
+    "plant_id": "dandelion_release",
+    "emoji": "🫥"
+  },
+  {
+    "id": "guilty",
+    "name": "内疚",
+    "english": "Guilty",
+    "definition": "认为自己的行为影响了别人或违背自己的标准",
+    "category": "self",
+    "related_cognitive_patterns": [
+      "personalization",
+      "should_thinking"
+    ],
+    "plant_id": "cactus_boundary",
+    "emoji": "😔"
+  },
+  {
+    "id": "ashamed",
+    "name": "羞愧",
+    "english": "Ashamed",
+    "definition": "对自己产生较强负面评价",
+    "category": "self",
+    "related_cognitive_patterns": [
+      "self_labeling",
+      "black_white"
+    ],
+    "plant_id": "cactus_boundary",
+    "emoji": "😳"
+  },
+  {
+    "id": "wronged",
+    "name": "委屈",
+    "english": "Wronged",
+    "definition": "感觉自己的付出、感受或处境没有被理解",
+    "category": "self",
+    "related_cognitive_patterns": [
+      "personalization",
+      "mind_reading"
+    ],
+    "plant_id": "cactus_boundary",
+    "emoji": "🥺"
+  },
+  {
+    "id": "jealous",
+    "name": "嫉妒",
+    "english": "Jealous",
+    "definition": "因比较或害怕失去而产生不舒服",
+    "category": "self",
+    "related_cognitive_patterns": [
+      "comparison"
+    ],
+    "plant_id": "dandelion_release",
+    "emoji": "😒"
+  },
+  {
+    "id": "insecure",
+    "name": "不安",
+    "english": "Insecure",
+    "definition": "对自己的能力、关系或价值缺乏确定感",
+    "category": "self",
+    "related_cognitive_patterns": [
+      "mind_reading",
+      "comparison"
+    ],
+    "plant_id": "cactus_boundary",
+    "emoji": "😟"
+  },
+  {
+    "id": "confused",
+    "name": "困惑",
+    "english": "Confused",
+    "definition": "面对信息或选择时难以判断",
+    "category": "self",
+    "related_cognitive_patterns": [
+      "fortune_telling",
+      "black_white"
+    ],
+    "plant_id": "mint_calm",
+    "emoji": "😕"
+  },
+  {
+    "id": "tired",
+    "name": "疲惫",
+    "english": "Tired",
+    "definition": "心理或身体能量下降",
+    "category": "self",
+    "related_cognitive_patterns": [],
+    "plant_id": "mint_calm",
+    "emoji": "😮‍💨"
+  }
+]

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import { api } from '../lib/api'
 import { todayStr } from '../lib/constants'
+import { getFoodEmoji } from '../lib/content/fortune'
 import type { CheckinToday, RecordItem } from '../lib/types'
 import { IconCheck, IconChevronDown, IconPlus, IconSparkle } from '../components/icons'
 
@@ -160,36 +161,48 @@ export default function RecordPage() {
             <div className="text-sm font-medium">✨ 今日幸运卡</div>
             <div className="text-xs text-ink/40">{checkin.lucky.date}</div>
           </div>
-          <p className="mt-3 text-center text-base font-medium leading-relaxed text-ink">
-            「{checkin.lucky.phrase}」
-          </p>
-          <div className="mt-4 grid grid-cols-2 gap-3">
-            <div className="rounded-2xl bg-sand/60 p-3">
-              <div className="text-xs font-medium text-leaf">宜</div>
-              <ul className="mt-1 space-y-0.5 text-xs text-ink/70">
-                {(checkin.lucky.yi.length ? checkin.lucky.yi : ['慢一点', '休息一下']).map((x) => (
-                  <li key={x}>· {x}</li>
-                ))}
-              </ul>
+
+          {/* 顶部三元素：幸运色 | 幸运数字 | 幸运食物（无第二行说明） */}
+          <div className="mt-4 grid grid-cols-3 divide-x divide-ink/5 rounded-2xl bg-sand/40 py-3 text-center">
+            <div className="flex flex-col items-center justify-center gap-1 px-2">
+              <span
+                className="h-4 w-4 rounded-full ring-1 ring-ink/10"
+                style={{ background: checkin.lucky.lucky_color.hex }}
+              />
+              <span className="text-xs font-medium" style={{ color: checkin.lucky.lucky_color.hex }}>
+                {checkin.lucky.lucky_color.name}
+              </span>
             </div>
-            <div className="rounded-2xl bg-sand/60 p-3">
-              <div className="text-xs font-medium text-[#C9886B]">忌</div>
-              <ul className="mt-1 space-y-0.5 text-xs text-ink/70">
-                {(checkin.lucky.ji.length ? checkin.lucky.ji : ['熬夜', '冲动决定']).map((x) => (
-                  <li key={x}>· {x}</li>
-                ))}
-              </ul>
+            <div className="flex items-center justify-center text-sm font-semibold text-ink">
+              {checkin.lucky.lucky_numbers.join('、')}
+            </div>
+            <div className="flex items-center justify-center gap-1 px-2 text-xs font-medium text-ink/80">
+              <span>{getFoodEmoji(checkin.lucky.lucky_food)}</span>
+              <span>{checkin.lucky.lucky_food}</span>
             </div>
           </div>
-          <div className="mt-3 flex items-center gap-2 rounded-2xl bg-sand/40 px-3 py-2.5">
-            <span
-              className="h-4 w-4 rounded-full ring-1 ring-ink/10"
-              style={{ background: checkin.lucky.color.hex }}
-            />
-            <span className="text-xs text-ink/60">今日幸运色</span>
-            <span className="ml-auto text-sm font-medium" style={{ color: checkin.lucky.color.hex }}>
-              {checkin.lucky.color.name}
-            </span>
+
+          <p className="mt-4 text-center text-base font-medium leading-relaxed text-ink">
+            {checkin.lucky.daily_message}
+          </p>
+
+          <div className="mt-4 grid grid-cols-2 gap-3">
+            <div className="rounded-2xl bg-sand/60 p-3">
+              <div className="text-xs font-medium text-leaf">建议</div>
+              <div className="mt-1.5 space-y-0.5 text-xs text-ink/70">
+                {checkin.lucky.recommended.map((x) => (
+                  <div key={x}>{x}</div>
+                ))}
+              </div>
+            </div>
+            <div className="rounded-2xl bg-sand/60 p-3">
+              <div className="text-xs font-medium text-[#C9886B]">避免</div>
+              <div className="mt-1.5 space-y-0.5 text-xs text-ink/70">
+                {checkin.lucky.avoid.map((x) => (
+                  <div key={x}>{x}</div>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
       )}

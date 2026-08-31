@@ -211,7 +211,7 @@ async function createRecord(env: Env, request: Request) {
   let aiStatus = 'skipped'
   if (analyze) {
     try {
-      analysis = await analyzeRecord(env, { title: title ?? undefined, content, tags: emotionTags })
+      analysis = await analyzeRecord(env, { title: title ?? undefined, content, user_selected_emotions: emotionTags })
       aiStatus = 'done'
     } catch {
       aiStatus = 'failed'
@@ -331,7 +331,7 @@ async function recordRoutes(env: Env, method: string, segs: string[], request: R
       const analysis = await analyzeRecord(env, {
         title: row.title ?? undefined,
         content: row.content,
-        tags: parseJson<string[]>(row.emotion_tags, []),
+        user_selected_emotions: parseJson<string[]>(row.emotion_tags, []),
       })
       await db
         .prepare('UPDATE records SET ai_emotion_tags = ?, ai_summary = ?, ai_reason = ?, ai_suggestion = ?, ai_status = ? WHERE id = ?')

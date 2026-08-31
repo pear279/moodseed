@@ -40,7 +40,7 @@ Cloudflare Pages
 
 ## Data model（D1，8 张表）
 
-`plants` 为静态配置（`data/plants.json`），非用户数据，不进 DB（减少 seed 复杂度）。
+`plants` 为静态配置（`src/content/plants/plants.json`，3 株），非用户数据，不进 DB（减少 seed 复杂度）。
 
 ```sql
 users(id TEXT PK, nickname TEXT DEFAULT '小种子', birthday TEXT, mbti TEXT,
@@ -120,16 +120,18 @@ moodseed/
 ├── PRODUCT.md / ARCHITECTURE.md / TASKS.md / AGENTS.md / README.md
 ├── package.json / vite.config.ts / tsconfig*.json / tailwind.config.js
 ├── wrangler.jsonc / .dev.vars.example / .gitignore / index.html
-├── data/            # 静态内容配置（plants/emotions/cognitive-patterns/lucky-*）
+├── src/content/     # 内容知识库（plants/cbt/fortune，JSON 配置化）
+├── src/lib/content/ # 内容统一读取层（供前端 + functions 共用）
 ├── functions/api/   # Pages Functions 路由（D1/R2/DeepSeek 代理）
 ├── migrations/      # D1 迁移 SQL
 ├── scripts/         # 种子/工具脚本
-├── public/          # favicon、静态资源
+├── public/          # favicon、植物插画等静态资源
+├── references/      # 原始素材（内容库 Markdown、植物/纹理参考图）
 └── src/             # React 前端
     ├── pages/       # Record/Puzzle/Me/Onboarding + 子屏
     ├── components/  # 复用组件
     ├── three/       # Three.js 拼图场景
-    ├── lib/         # api.ts / userId / luck / zodiac / lunar / types
+    ├── lib/         # api.ts / userId / content(读取层) / types
     └── assets/      # SVG 插画、蜘蛛网、漂流瓶图标
 ```
 
