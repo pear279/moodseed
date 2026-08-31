@@ -42,6 +42,8 @@ interface State {
   group: THREE.Group
   flipStart: number | null
   pointer: { x: number; y: number }
+  boardW: number
+  boardH: number
 }
 
 const easeInOutCubic = (t: number) =>
@@ -92,8 +94,20 @@ export function PlantPuzzle3D({ image, positions, cols = 6, rows = 6, flip = fal
       group,
       flipStart: null,
       pointer: { x: 0, y: 0 },
+      boardW: 2.4,
+      boardH: 2.4,
     }
     stateRef.current = state
+
+    // 相机适配：同时约束宽高（contain），避免正方形板面溢出
+    const fitCamera = () => {
+      const halfFov = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))
+      const aspect = camera.aspect > 0 ? camera.aspect : 1
+      const zH = state.boardH / 0.92 / (2 * halfFov)
+      const zW = state.boardW / 0.92 / (2 * halfFov * aspect)
+      camera.position.z = Math.max(zH, zW)
+      camera.updateProjectionMatrix()
+    }
 
     let texture: THREE.Texture | null = null
 
@@ -113,6 +127,8 @@ export function PlantPuzzle3D({ image, positions, cols = 6, rows = 6, flip = fal
         // 正方形 1:1 板面
         const boardH = 2.4
         const boardW = boardH
+        state.boardW = boardW
+        state.boardH = boardH
         const pieceW = boardW / cols
         const pieceH = boardH / rows
 
@@ -160,9 +176,8 @@ export function PlantPuzzle3D({ image, positions, cols = 6, rows = 6, flip = fal
           }
         }
 
-        // 让相机距离适配板面高度
-        camera.position.z =
-          boardH / 2 / (0.92 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)))
+        // 相机适配（同时约束宽高，避免溢出）
+        fitCamera()
 
         // 碎片构建完成后，套用当前已解锁位置
         applyPositions(positionsRef.current)
@@ -194,6 +209,7 @@ export function PlantPuzzle3D({ image, positions, cols = 6, rows = 6, flip = fal
         renderer.setSize(w, h)
         camera.aspect = w / h
         camera.updateProjectionMatrix()
+        fitCamera()
       }
     }
     resize()
