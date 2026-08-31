@@ -76,12 +76,16 @@ async function userRoutes(env: Env, method: string, segs: string[], request: Req
   if (method === 'POST' && segs.length === 1) {
     const { id } = await body(request)
     if (!id) return jsonError('缺少 id')
-    const ins = await db
+    await db
       .prepare('INSERT INTO users (id) VALUES (?) ON CONFLICT(id) DO NOTHING')
       .bind(id)
       .run()
-    // 新用户：第一个植物默认已解锁 34 块碎片（再获得 2 块即完成第一张拼图）
-    if (ins.meta?.changes === 1) {
+    // 初始碎片：用户还没有任何拼图进度时，为第一个植物预置 34 块（再获得 2 块即完成首张拼图）
+    const prog = await db
+      .prepare('SELECT COUNT(*) AS c FROM puzzle_progress WHERE user_id = ?')
+      .bind(id)
+      .first()
+    if (!(prog?.c ?? 0)) {
       await awardPieces(db, id, REWARDS.initialPiecesPerPlant)
     }
     const row = await db.prepare('SELECT * FROM users WHERE id = ?').bind(id).first()
