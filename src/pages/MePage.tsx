@@ -4,6 +4,16 @@ import { api } from '../lib/api'
 import { REWARDS, TIMEZONE, todayStr } from '../lib/constants'
 import { zodiacOf } from '../lib/zodiac'
 import type { DayActivity, UserStats } from '../lib/types'
+import {
+  AnimatedToastStack,
+  Button,
+  Input,
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  useAnimatedToastStack,
+} from '@/components/ui'
+import { AnimatedNumber, GlowEffect, Tilt } from '@/components/core'
 import { IconClose } from '../components/icons'
 
 const MBTI = ['INTJ', 'INTP', 'ENTJ', 'ENTP', 'INFJ', 'INFP', 'ENFJ', 'ENFP', 'ISTJ', 'ISFJ', 'ESTJ', 'ESFJ', 'ISTP', 'ISFP', 'ESTP', 'ESFP']
@@ -40,13 +50,15 @@ function ProfileModal({ onClose }: { onClose: () => void }) {
           </button>
         </div>
 
-        <label className="mb-2 block text-sm text-ink/60">昵称</label>
-        <input value={nickname} onChange={(e) => setNickname(e.target.value)} maxLength={12}
-          className="mb-4 w-full rounded-2xl border border-ink/10 bg-white px-4 py-3 outline-none focus:border-moss" />
-
-        <label className="mb-2 block text-sm text-ink/60">生日（选填，自动生成星座）</label>
-        <input type="date" value={birthday} max={todayStr()} onChange={(e) => setBirthday(e.target.value)}
-          className="mb-1 w-full rounded-2xl border border-ink/10 bg-white px-4 py-3 outline-none focus:border-moss" />
+        <Input label="昵称" value={nickname} onChange={setNickname} maxLength={12} className="mb-4" />
+        <Input
+          label="生日（选填，自动生成星座）"
+          type="date"
+          value={birthday}
+          onChange={setBirthday}
+          max={todayStr()}
+          className="mb-1"
+        />
         {birthday && <div className="mb-4 mt-1 text-xs text-leaf">✨ 星座：{zodiacOf(birthday)}</div>}
 
         <label className="mb-2 block text-sm text-ink/60">MBTI（选填）</label>
@@ -59,10 +71,9 @@ function ProfileModal({ onClose }: { onClose: () => void }) {
           ))}
         </div>
 
-        <button onClick={save} disabled={saving}
-          className="w-full rounded-2xl bg-moss py-3.5 font-medium text-white active:bg-leaf disabled:opacity-50">
+        <Button onClick={save} disabled={saving} className="w-full">
           {saving ? '保存中…' : '保存'}
-        </button>
+        </Button>
       </div>
     </div>
   )
@@ -75,7 +86,7 @@ export default function MePage() {
   const [monthView, setMonthView] = useState(false)
   const [editing, setEditing] = useState(false)
   const [exchanging, setExchanging] = useState(false)
-  const [toast, setToast] = useState('')
+  const { toasts, showToast, dismissToast } = useAnimatedToastStack({ defaultDuration: 3200 })
 
   const load = useCallback(async () => {
     if (!user) return
@@ -131,8 +142,11 @@ export default function MePage() {
       const res = await api.exchange(user.id)
       await refreshUser()
       await load()
-      setToast(`已兑换 1 块碎片，当前植物恢复到 ${res.unlockedCount}/${REWARDS.piecesPerPlant}`)
-      setTimeout(() => setToast(''), 2600)
+      showToast({
+        status: 'success',
+        title: '兑换成功',
+        description: `当前植物恢复到 ${res.unlockedCount}/${REWARDS.piecesPerPlant}`,
+      })
     } finally {
       setExchanging(false)
     }
@@ -143,72 +157,77 @@ export default function MePage() {
   return (
     <div className="px-5 pb-24 pt-6">
       {/* 个人信息 */}
-      <section className="flex items-center gap-4 rounded-3xl bg-white p-5 shadow-card">
-        <div className="grid h-14 w-14 place-items-center rounded-2xl bg-lime/40 text-2xl">🌿</div>
-        <div className="min-w-0 flex-1">
-          <div className="truncate text-lg font-semibold">{user?.nickname}</div>
-          <div className="mt-0.5 text-xs text-ink/50">
-            {user?.birthday ? `${zodiacOf(user.birthday)}${user.mbti ? ' · ' + user.mbti : ''}` : user?.mbti || '还未填写生日与 MBTI'}
+      <Tilt rotationFactor={6}>
+        <section className="relative flex items-center gap-4 overflow-hidden rounded-2xl bg-white p-5 shadow-card">
+          <GlowEffect colors={['#6faf6f', '#d9e8d3']} mode="breathe" blur="soft" duration={6} />
+          <div className="relative grid h-14 w-14 place-items-center rounded-2xl bg-lime/40 text-2xl">🌿</div>
+          <div className="relative min-w-0 flex-1">
+            <div className="truncate text-lg font-semibold">{user?.nickname}</div>
+            <div className="mt-0.5 text-xs text-ink/50">
+              {user?.birthday ? `${zodiacOf(user.birthday)}${user.mbti ? ' · ' + user.mbti : ''}` : user?.mbti || '还未填写生日与 MBTI'}
+            </div>
+          </div>
+          <button onClick={() => setEditing(true)} className="relative rounded-full bg-sand px-4 py-1.5 text-sm text-ink/70 active:bg-lime/30">
+            编辑
+          </button>
+        </section>
+      </Tilt>
+
+      {/* 核心数据 Bento（1 主块 + 3 数据块，无空单元） */}
+      <section className="mt-4">
+        <div className="rounded-2xl bg-moss p-4 text-white">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-xs text-white/70">当前积分</div>
+              <div className="mt-1 text-3xl font-semibold">
+                <AnimatedNumber value={user?.points ?? 0} />
+              </div>
+            </div>
+            <div className="text-right text-xs text-white/70">
+              <div>{REWARDS.pointsPerPiece} 积分 = 1 块碎片</div>
+              <div className="mt-1">
+                {canExchange
+                  ? '已可兑换'
+                  : `还差 ${REWARDS.pointsPerPiece - (user?.points ?? 0)} 积分可兑换`}
+              </div>
+            </div>
           </div>
         </div>
-        <button onClick={() => setEditing(true)} className="rounded-full bg-sand px-4 py-1.5 text-sm text-ink/70 active:bg-lime/30">
-          编辑
-        </button>
-      </section>
 
-      {/* 核心数据（扁平化，弱化卡片感） */}
-      <section className="mt-4 grid grid-cols-3 gap-2.5">
-        {[
-          { label: '连续记录', value: stats?.streak_days ?? 0, unit: '天' },
-          { label: '累计记录', value: stats?.total_days ?? 0, unit: '天' },
-          { label: '已解锁植物', value: stats?.plants_unlocked ?? 0, unit: '株' },
-        ].map((s) => (
-          <div key={s.label} className="rounded-2xl bg-white/70 p-3.5 text-center">
-            <div className="text-2xl font-semibold text-moss">
-              {s.value}
-              <span className="ml-0.5 text-xs text-ink/40">{s.unit}</span>
+        <div className="mt-2.5 grid grid-cols-3 gap-2.5">
+          {[
+            { label: '连续记录', value: stats?.streak_days ?? 0, unit: '天' },
+            { label: '累计记录', value: stats?.total_days ?? 0, unit: '天' },
+            { label: '已解锁植物', value: stats?.plants_unlocked ?? 0, unit: '株' },
+          ].map((s) => (
+            <div key={s.label} className="rounded-2xl bg-white/80 p-3.5 text-center">
+              <div className="text-2xl font-semibold text-moss">
+                <AnimatedNumber value={s.value} />
+                <span className="ml-0.5 text-xs text-ink/40">{s.unit}</span>
+              </div>
+              <div className="mt-1 text-xs text-ink/50">{s.label}</div>
             </div>
-            <div className="mt-1 text-xs text-ink/50">{s.label}</div>
-          </div>
-        ))}
-      </section>
-
-      {/* 积分（浅色卡，降低视觉权重） */}
-      <section className="mt-4 rounded-3xl bg-[#F5E9DC] p-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="text-xs text-ink/50">当前积分</div>
-            <div className="mt-0.5 text-2xl font-semibold text-[#C9886B]">{user?.points ?? 0}</div>
-          </div>
-          <div className="text-right text-xs text-ink/55">
-            <div>{REWARDS.pointsPerPiece} 积分 = 1 块拼图碎片</div>
-            <div className="mt-1">
-              {canExchange
-                ? '已可兑换'
-                : `还差 ${REWARDS.pointsPerPiece - (user?.points ?? 0)} 积分可兑换`}
-            </div>
-          </div>
+          ))}
         </div>
       </section>
 
       {/* 积分兑换：仅积分 ≥21 时显示 */}
       {canExchange && (
-        <button
-          onClick={doExchange}
-          disabled={exchanging}
-          className="mt-3 w-full rounded-2xl bg-moss py-3 font-medium text-white active:bg-leaf disabled:opacity-40"
-        >
+        <Button onClick={doExchange} disabled={exchanging} className="mt-3 w-full">
           {exchanging ? '兑换中…' : `兑换 1 块拼图碎片（${REWARDS.pointsPerPiece} 积分）`}
-        </button>
+        </Button>
       )}
 
       {/* 记录日历 */}
       <section className="mt-6">
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-base font-semibold">记录日历</h2>
-          <button onClick={() => setMonthView((v) => !v)} className="text-sm text-moss active:opacity-60">
-            {monthView ? '收起为周视图' : '展开月视图'}
-          </button>
+          <Tabs value={monthView ? 'month' : 'week'} onValueChange={(v) => setMonthView(v === 'month')} variant="segment">
+            <TabsList>
+              <TabsTrigger value="week">周</TabsTrigger>
+              <TabsTrigger value="month">月</TabsTrigger>
+            </TabsList>
+          </Tabs>
         </div>
 
         <div className="rounded-3xl bg-white p-4 shadow-card">
@@ -242,11 +261,7 @@ export default function MePage() {
         </div>
       </section>
 
-      {toast && (
-        <div className="fixed bottom-24 left-1/2 z-50 -translate-x-1/2 rounded-full bg-ink px-4 py-2 text-sm text-white shadow-lift">
-          {toast}
-        </div>
-      )}
+      <AnimatedToastStack toasts={toasts} onDismiss={dismissToast} position="bottom-center" placement="fixed" />
 
       {editing && <ProfileModal onClose={() => setEditing(false)} />}
     </div>

@@ -57,6 +57,30 @@
 - [ ] 6.5 `pnpm build` 全量通过 + 部署 Cloudflare Pages + 验证公网（需用户 Cloudflare 账号）
 - [x] 6.6 推送 GitHub（已 `git init` + 首提交，待创建远端仓库）
 
+## Phase 7 — 36 片成长拼图（SVG 重构 + 自由拼图）✅
+> 依 `references/moodseed_36_piece_puzzle_dev_spec.md` 重做拼图：SVG 替换 Three.js，收藏进度沿用 D1，自由拼图游戏状态用 LocalStorage。
+- [x] 7.1 拼图引擎：固定 6×6=36 块模板（凸榫/凹槽严格互补、外框平直、1:1 无缝）+ vitest 单测
+- [x] 7.2 图片 ClipPath：1:1 原图（`public/plants/puzzle/*`）+ 主题映射 + `CollectionPuzzleBoard`
+- [x] 7.3 收集模式：PuzzlePage 接入 SVG 板（米白占位 / ClipPath 原图），复用 D1 进度（每日 3 块/确定性洗牌）
+- [x] 7.4 解锁 reveal 动画 + 2D 完成反馈 + 「重新拼图」入口 + 移除 Three.js 依赖
+- [x] 7.5 自由画布 + Pointer 拖动（scatter / drag / zIndex / 逻辑坐标 2400×2400）
+- [x] 7.6 Snap 邻块吸附（错误邻块不吸附）
+- [x] 7.7 Group 连块整体拖动 / 合并
+- [x] 7.8 完成判定 + 查看原图 / 整理碎片 / 重新打乱 + LocalStorage 存取
+- [x] 7.9 移动端与视觉优化（touch-action / 触摸阈值 / 边界约束 / 阴影）
+- [~] 7.10 浏览器端到端视觉验收（浏览器因切换标签暂停，待恢复；临时预览 `/preview-puzzle`、自由拼图 `/play/:plantId` 可直接访问）
+
+## Phase 8 — UI 组件库组合 + 品牌重设计 ✅
+> BeUI（App 交互原语）+ Watermelon UI（页面 Block）+ Impeccable（设计质量门禁），Tailwind v4 + shadcn 约定。
+- [x] 8.1 Tailwind v3→v4 迁移（tailwindcss@4 + @tailwindcss/vite + `@theme` token）
+- [x] 8.2 shadcn 约定：`components.json` + `@/` 别名 + `cn()` + 语义 token
+- [x] 8.3 品牌重设计：冷纸白 + 深森林绿 + 暖金（全站 token 生效）
+- [x] 8.4 vendor BeUI 7 组件（Button/Loader/Input/Switch/Tabs/TiltCard/AnimatedToastStack）+ `@/lib/ease` + `use-hover-capable`，`src/components/ui` 导出层
+- [x] 8.5 `DESIGN.md`（三库组合 + token + 组件映射 + 接入方式）
+- [x] 8.6 已应用全部页面：Onboarding/Record/Puzzle/PuzzlePlay/Me/Compose/Bottle + 全局加载态
+- [~] 8.7 Watermelon UI：registry 不可访问（SPA 404）+ CLI 崩溃，Me 页 Bento 手写实现，待 registry 可访问后替换
+- [~] 8.8 Impeccable audit：contrast/圆角/动效规则内联执行，浏览器视觉验收待恢复
+
 ## 验收清单（对照 PRODUCT.md）
 - [x] 核心闭环后端完整跑通（引导→记录→AI→碎片→修复→36块→翻牌→下一株）——API 层已 curl 验证
 - [~] 三页 + 引导 UI 浏览器端到端验证（浏览器因切换标签暂停，待恢复）

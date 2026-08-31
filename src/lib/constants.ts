@@ -2,6 +2,8 @@
 export const REWARDS = {
   /** 每株植物拼图块数（36 片，6×6 正方形） */
   piecesPerPlant: 36,
+  /** 新用户第一个植物默认已解锁的碎片数（再获得 2 块即完成第一张拼图） */
+  initialPiecesPerPlant: 34,
   /** 拼图网格列数 */
   gridCols: 6,
   /** 拼图网格行数 */

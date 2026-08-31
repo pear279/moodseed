@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import { DEFAULT_NICKNAME } from '../lib/constants'
 import { zodiacOf } from '../lib/zodiac'
+import { Button, Input } from '@/components/ui'
+import { Magnetic, TextEffect } from '@/components/core'
 import { IconArrowLeft } from '../components/icons'
 
 const RANDOM_NICKNAMES = [
@@ -66,15 +68,17 @@ export default function Onboarding() {
         {step === 0 ? (
           <div className="animate-slide-up">
             <div className="text-4xl">🌱</div>
-            <h1 className="mt-4 text-2xl font-semibold">怎么称呼你？</h1>
+            <TextEffect as="h1" preset="fade-in-blur" className="mt-4 text-2xl font-semibold">
+              怎么称呼你？
+            </TextEffect>
             <p className="mt-2 text-sm text-ink/50">可以自己取一个，也可以用随机昵称，或直接跳过。</p>
 
-            <input
+            <Input
               value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
+              onChange={setNickname}
               placeholder={DEFAULT_NICKNAME}
               maxLength={12}
-              className="mt-8 w-full rounded-2xl border border-ink/10 bg-white px-4 py-4 text-lg outline-none focus:border-moss"
+              className="mt-8"
             />
             <button
               onClick={randomNickname}
@@ -89,12 +93,12 @@ export default function Onboarding() {
             <h1 className="mt-4 text-2xl font-semibold">告诉我你的生日</h1>
             <p className="mt-2 text-sm text-ink/50">选填。填了以后，为你生成属于你的星座和幸运信息。</p>
 
-            <input
+            <Input
               type="date"
               value={birthday}
+              onChange={setBirthday}
               max={new Date().toISOString().slice(0, 10)}
-              onChange={(e) => setBirthday(e.target.value)}
-              className="mt-8 w-full rounded-2xl border border-ink/10 bg-white px-4 py-4 text-lg outline-none focus:border-moss"
+              className="mt-8"
             />
             {zodiac && (
               <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-lime/40 px-4 py-1.5 text-sm text-leaf">
@@ -107,21 +111,18 @@ export default function Onboarding() {
 
       <div className="pb-10">
         {step === 0 ? (
-          <button
-            onClick={() => setStep(1)}
-            className="w-full rounded-2xl bg-moss py-4 text-base font-medium text-white active:bg-leaf"
-          >
-            下一步
-          </button>
+          <Magnetic>
+            <Button onClick={() => setStep(1)} size="lg" className="w-full">
+              下一步
+            </Button>
+          </Magnetic>
         ) : (
           <div className="space-y-3">
-            <button
-              onClick={finish}
-              disabled={saving}
-              className="w-full rounded-2xl bg-moss py-4 text-base font-medium text-white disabled:opacity-50 active:bg-leaf"
-            >
-              {saving ? '进入中…' : '开始记录 🌱'}
-            </button>
+            <Magnetic>
+              <Button onClick={finish} disabled={saving} size="lg" className="w-full">
+                {saving ? '进入中…' : '开始记录'}
+              </Button>
+            </Magnetic>
             <button
               onClick={finish}
               className="w-full py-2 text-sm text-stone active:opacity-60"

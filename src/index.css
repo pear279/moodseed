@@ -1,10 +1,91 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root {
-  --cream: #faf7f0;
-  --ink: #2e3a2e;
+@theme {
+  /* —— 品牌色（情绪植物 · 温室/森林方向：冷调纸白 + 深绿主色 + 暖金奖励）—— */
+  --color-cream: #f4f7f3;
+  --color-sand: #e8efe6;
+  --color-ink: #172019;
+  --color-soil: #8a7455;
+  --color-stone: #5f7263;
+  --color-moss: #2f5d3e;
+  --color-leaf: #3e7a4e;
+  --color-sprout: #6faf6f;
+  --color-lime: #d9e8d3;
+  --color-gold: #d9a441;
+
+  /* —— shadcn 语义 token（BeUI / Watermelon UI 依赖）—— */
+  --color-background: #f4f7f3;
+  --color-foreground: #172019;
+  --color-card: #ffffff;
+  --color-card-foreground: #172019;
+  --color-muted: #e8efe6;
+  --color-muted-foreground: #5f7263;
+  --color-border: #dbe5d9;
+  --color-border-strong: #b9cab5;
+  --color-primary: #2f5d3e;
+  --color-primary-foreground: #ffffff;
+  --color-accent: #6faf6f;
+  --color-accent-foreground: #0f2016;
+  --color-destructive: #b5543a;
+  --color-destructive-foreground: #ffffff;
+  --color-success: #6faf6f;
+  --color-ring: #6faf6f;
+
+  /* —— 字体 —— */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "PingFang SC", "Noto Sans SC",
+    "Microsoft YaHei", sans-serif;
+
+  /* —— 阴影 —— */
+  --shadow-card: 0 2px 12px rgba(23, 32, 25, 0.08);
+  --shadow-lift: 0 8px 30px rgba(23, 32, 25, 0.14);
+  --shadow-glow: 0 0 40px rgba(111, 175, 111, 0.55);
+
+  /* —— 动画 —— */
+  --animate-fade-in: fade-in 0.3s ease-out;
+  --animate-slide-up: slide-up 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-pop-in: pop-in 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-float: float 3s ease-in-out infinite;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  60% {
+    transform: scale(1.06);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
 }
 
 html,
@@ -15,10 +96,9 @@ body,
 
 body {
   margin: 0;
-  background: #e9e4d8;
-  color: var(--ink);
-  font-family: ui-sans-serif, system-ui, -apple-system, 'PingFang SC', 'Noto Sans SC',
-    'Microsoft YaHei', sans-serif;
+  background: #dfe7dc;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior-y: none;
@@ -29,8 +109,8 @@ body {
   max-width: 28rem;
   margin: 0 auto;
   min-height: 100dvh;
-  background: var(--cream);
-  box-shadow: 0 0 0 1px rgba(46, 58, 46, 0.04), 0 0 40px rgba(46, 58, 46, 0.08);
+  background: var(--color-cream);
+  box-shadow: 0 0 0 1px rgba(23, 32, 25, 0.04), 0 0 40px rgba(23, 32, 25, 0.08);
 }
 
 /* 隐藏滚动条但可滚动 */
@@ -45,6 +125,19 @@ body {
 /* 破败（未解锁）拼图块 */
 .piece-broken {
   filter: grayscale(1) brightness(0.72) contrast(0.9);
+}
+
+/* 拼图解锁 reveal（柔和淡入，避免抽卡式强反馈） */
+@keyframes piece-reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.piece-reveal {
+  animation: piece-reveal 0.5s ease-out both;
 }
 
 /* 安全区适配 */

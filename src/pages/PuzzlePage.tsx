@@ -4,7 +4,10 @@ import { useApp } from '../context/AppContext'
 import { api } from '../lib/api'
 import { REWARDS } from '../lib/constants'
 import type { Plant, PlantProgress, ProgressOverview } from '../lib/types'
-import { PlantPuzzle3D } from '../three/PlantPuzzle3D'
+import { CollectionPuzzleBoard } from '../components/puzzle/CollectionPuzzleBoard'
+import { Button, Loader, TiltCard } from '@/components/ui'
+import { TextEffect } from '@/components/core'
+import { getPuzzleThemeById } from '../lib/content/puzzles'
 import { IconBottle, IconLock } from '../components/icons'
 
 const ALL_PIECES = Array.from({ length: REWARDS.piecesPerPlant }, (_, i) => i)
@@ -112,7 +115,7 @@ export default function PuzzlePage() {
   if (loading) {
     return (
       <div className="grid h-[100dvh] place-items-center">
-        <div className="animate-float text-3xl">🌱</div>
+        <Loader variant="dots" size={40} className="text-moss" label="加载中" />
       </div>
     )
   }
@@ -120,7 +123,9 @@ export default function PuzzlePage() {
   return (
     <div className="flex h-[100dvh] flex-col pt-6">
       <header className="px-5">
-        <h1 className="text-xl font-semibold">拼图</h1>
+        <TextEffect as="h1" preset="fade-in-blur" className="text-xl font-semibold">
+          拼图
+        </TextEffect>
         <p className="mt-0.5 text-xs text-ink/40">每记录一次，植物就恢复一点生命。</p>
       </header>
 
@@ -133,7 +138,7 @@ export default function PuzzlePage() {
         >
           {views.map((v) => (
             <div key={v.plant.id} className="h-full w-full shrink-0 px-5 pb-4">
-              <PlantView view={v} />
+              <PlantView view={v} onPlay={(plant) => navigate(`/play/${plant.id}`)} />
             </div>
           ))}
         </div>
@@ -164,9 +169,13 @@ export default function PuzzlePage() {
             <h2 className="mt-3 text-lg font-semibold">植物完整复苏！</h2>
             <p className="mt-1 text-sm text-ink/60">你已点亮 {celebrate.plant_name} 的全部 {REWARDS.piecesPerPlant} 块拼图。</p>
 
-            {/* 植物卡片（Three.js 翻牌一圈） */}
+            {/* 完整拼图（SVG ClipPath，2D 呈现） */}
             <div className="mx-auto mt-5 h-52 w-full">
-              <PlantPuzzle3D image={celebrate.image_path} positions={ALL_PIECES} flip className="h-full w-full" />
+              <CollectionPuzzleBoard
+                theme={getPuzzleThemeById(celebrate.id)!}
+                unlockedIds={new Set(ALL_PIECES)}
+                className="h-full w-full"
+              />
             </div>
 
             <div className="mt-4 text-sm font-medium text-leaf">{celebrate.emotion_theme}</div>
@@ -181,11 +190,12 @@ export default function PuzzlePage() {
           </div>
         </div>
       )}
+
     </div>
   )
 }
 
-function PlantView({ view }: { view: View }) {
+function PlantView({ view, onPlay }: { view: View; onPlay: (plant: Plant) => void }) {
   if (view.kind === 'locked') {
     return (
       <div className="flex h-full flex-col items-center justify-center">
@@ -207,7 +217,7 @@ function PlantView({ view }: { view: View }) {
   if (view.kind === 'completed') {
     return (
       <div className="flex h-full flex-col items-center justify-center">
-        <div className="w-full max-w-[280px] overflow-hidden rounded-3xl bg-white shadow-card">
+        <TiltCard className="w-full max-w-[280px] bg-white shadow-card">
           <img src={view.plant.image_path} alt={view.plant.plant_name} className="aspect-[3/4] w-full object-cover" />
           <div className="p-4 text-center">
             <div className="text-lg font-semibold">{view.plant.plant_name}</div>
@@ -217,7 +227,11 @@ function PlantView({ view }: { view: View }) {
               已完成 · {view.progress.completed_at?.slice(0, 10)}
             </div>
           </div>
-        </div>
+        </TiltCard>
+
+        <Button onClick={() => onPlay(view.plant)} className="mt-4 w-full max-w-[280px]">
+          玩拼图
+        </Button>
       </div>
     )
   }
@@ -237,15 +251,22 @@ function PlantView({ view }: { view: View }) {
       </div>
 
       <div className="flex-1">
-        <PlantPuzzle3D
-          image={view.plant.image_path}
-          positions={view.progress.positions}
-          flip={count >= REWARDS.piecesPerPlant}
+        <CollectionPuzzleBoard
+          theme={getPuzzleThemeById(view.plant.id)!}
+          unlockedIds={new Set(view.progress.positions)}
           className="h-full w-full"
         />
       </div>
 
       <p className="mt-3 text-center text-sm text-ink/60">「{view.plant.quote}」</p>
+
+      <button
+        disabled
+        className="mt-3 flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-full bg-sand py-3 text-sm font-medium text-stone/70"
+      >
+        <IconLock width={16} height={16} />
+        待解锁
+      </button>
     </div>
   )
 }

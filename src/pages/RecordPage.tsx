@@ -7,6 +7,8 @@ import { getFoodEmoji } from '../lib/content/fortune'
 import { formatDateCN } from '../lib/format'
 import type { CheckinToday, RecordItem } from '../lib/types'
 import { ImageCollage } from '../components/ImageCollage'
+import { Button } from '@/components/motion/button'
+import { Spotlight, TextEffect } from '@/components/core'
 import { IconCheck, IconChevronDown, IconPlus, IconSparkle } from '../components/icons'
 
 function greeting(): string {
@@ -204,13 +206,16 @@ export default function RecordPage() {
       <header className="flex items-end justify-between">
         <div>
           <div className="text-sm text-ink/50">{greeting()}，{user?.nickname}</div>
-          <h1 className="mt-1 text-xl font-semibold">记录</h1>
+          <TextEffect as="h1" preset="fade-in-blur" className="mt-1 text-xl font-semibold">
+            记录
+          </TextEffect>
         </div>
         <div className="text-xs text-ink/40">{todayStr()}</div>
       </header>
 
       {/* 签到卡片 */}
-      <section className="mt-4 rounded-3xl bg-gradient-to-br from-moss to-leaf p-5 text-white shadow-card">
+      <section className="relative mt-4 overflow-hidden rounded-2xl bg-gradient-to-br from-moss to-leaf p-5 text-white shadow-card">
+        <Spotlight className="-top-24 left-0" />
         <div className="flex items-center justify-between">
           <div>
             <div className="text-sm text-white/80">每日签到</div>
@@ -290,13 +295,10 @@ export default function RecordPage() {
       )}
 
       {/* 添加记录入口 */}
-      <button
-        onClick={() => navigate('/compose')}
-        className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-moss/30 py-4 text-moss active:bg-lime/20"
-      >
-        <IconPlus width={22} height={22} />
-        <span className="font-medium">添加记录</span>
-      </button>
+      <Button onClick={() => navigate('/compose')} size="lg" className="mt-5 w-full">
+        <IconPlus width={20} height={20} />
+        添加记录
+      </Button>
 
       {/* 历史手记 */}
       <section className="mt-6">

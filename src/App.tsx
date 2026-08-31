@@ -1,5 +1,6 @@
 import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AppProvider, useApp } from './context/AppContext'
+import { Loader } from '@/components/ui'
 import { TabLayout } from './components/TabLayout'
 import Onboarding from './pages/Onboarding'
 import RecordPage from './pages/RecordPage'
@@ -7,6 +8,7 @@ import PuzzlePage from './pages/PuzzlePage'
 import MePage from './pages/MePage'
 import ComposePage from './pages/ComposePage'
 import BottlePage from './pages/BottlePage'
+import PuzzlePlayPage from './pages/PuzzlePlayPage'
 
 function RequireOnboarded({ children }: { children: React.ReactNode }) {
   const { onboarded } = useApp()
@@ -17,7 +19,7 @@ function RequireOnboarded({ children }: { children: React.ReactNode }) {
 function LoadingScreen() {
   return (
     <div className="flex h-[100dvh] items-center justify-center">
-      <div className="animate-float text-3xl">🌱</div>
+      <Loader variant="dots" size={40} className="text-moss" label="加载中" />
     </div>
   )
 }
@@ -43,6 +45,7 @@ function AppRoutes() {
       <Route path="/compose" element={<ComposePage />} />
       <Route path="/compose/:id" element={<ComposePage />} />
       <Route path="/bottle" element={<BottlePage />} />
+      <Route path="/play/:plantId" element={<PuzzlePlayPage />} />
       <Route path="*" element={<Navigate to={onboarded ? '/record' : '/onboarding'} replace />} />
     </Routes>
   )

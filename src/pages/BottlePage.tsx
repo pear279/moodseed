@@ -5,6 +5,7 @@ import { api } from '../lib/api'
 import { REWARDS } from '../lib/constants'
 import type { Bottle } from '../lib/types'
 import { EmotionPicker } from '../components/EmotionPicker'
+import { BottomSheet, Button } from '@/components/ui'
 import { IconArrowLeft, IconBottle, IconComment, IconHeart } from '../components/icons'
 
 export default function BottlePage() {
@@ -19,6 +20,7 @@ export default function BottlePage() {
   const [publishing, setPublishing] = useState(false)
   const [publishContent, setPublishContent] = useState('')
   const [publishTags, setPublishTags] = useState<string[]>([])
+  const [publishOpen, setPublishOpen] = useState(false)
   const [commentText, setCommentText] = useState('')
   const [error, setError] = useState('')
 
@@ -179,9 +181,9 @@ export default function BottlePage() {
                 maxLength={200}
                 className="min-w-0 flex-1 rounded-full border border-ink/10 bg-white px-3 py-2 text-sm outline-none focus:border-moss"
               />
-              <button onClick={comment} className="rounded-full bg-sand px-4 text-sm text-ink/70 active:bg-lime/30">
+              <Button onClick={comment} variant="secondary" size="sm">
                 评论
-              </button>
+              </Button>
             </div>
           </div>
         )}
@@ -189,28 +191,34 @@ export default function BottlePage() {
 
       {/* 发布 */}
       <section className="mt-8">
-        <div className="mb-2 flex items-center gap-2 text-sm font-medium text-ink/70">
+        <Button onClick={() => setPublishOpen(true)} variant="secondary" className="w-full">
           <IconBottle width={16} height={16} /> 发布我的漂流瓶
-        </div>
+        </Button>
+      </section>
+
+      <BottomSheet open={publishOpen} onOpenChange={setPublishOpen} snapPoints={[0.72, 0.95]} title="发布我的漂流瓶">
         <textarea
           value={publishContent}
           onChange={(e) => setPublishContent(e.target.value)}
           placeholder="写下一段此刻想说的话，匿名地放进海里…"
-          rows={3}
+          rows={4}
           maxLength={500}
           className="w-full resize-none rounded-2xl border border-ink/10 bg-white px-4 py-3 outline-none focus:border-moss"
         />
         <div className="mt-2">
           <EmotionPicker selected={publishTags} onChange={setPublishTags} />
         </div>
-        <button
-          onClick={publish}
+        <Button
+          onClick={async () => {
+            await publish()
+            setPublishOpen(false)
+          }}
           disabled={publishing || !publishContent.trim()}
-          className="mt-3 w-full rounded-2xl bg-moss py-3.5 font-medium text-white active:bg-leaf disabled:opacity-50"
+          className="mt-3 w-full"
         >
           {publishing ? '发布中…' : '放入大海'}
-        </button>
-      </section>
+        </Button>
+      </BottomSheet>
     </div>
   )
 }

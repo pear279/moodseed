@@ -6,6 +6,7 @@ import { REWARDS, todayStr } from '../lib/constants'
 import { formatDateCN } from '../lib/format'
 import type { AiAnalysis } from '../lib/types'
 import { EmotionPicker } from '../components/EmotionPicker'
+import { Button, Input, Loader, Switch } from '@/components/ui'
 import { IconArrowLeft, IconClose, IconImage, IconSparkle } from '../components/icons'
 
 // 5 级心情脸主轴（对应一个代表性情绪标签，快选）
@@ -260,18 +261,14 @@ export default function ComposePage() {
           <IconArrowLeft width={22} height={22} />
         </button>
         <div className="text-sm text-ink/60">{formatDateCN(todayStr())}</div>
-        <button
-          onClick={submit}
-          disabled={!canSubmit}
-          className="rounded-full bg-moss px-4 py-1.5 text-sm font-medium text-white disabled:opacity-40 active:bg-leaf"
-        >
+        <Button onClick={submit} disabled={!canSubmit} size="sm">
           {submitting ? '提交中…' : '完成'}
-        </button>
+        </Button>
       </header>
 
       {loadingExisting ? (
         <div className="grid flex-1 place-items-center">
-          <div className="animate-float text-3xl">🌱</div>
+          <Loader variant="dots" size={40} className="text-moss" label="加载中" />
         </div>
       ) : (
         <div className="mt-4 flex-1 space-y-4 px-5">
@@ -313,13 +310,7 @@ export default function ComposePage() {
           <input ref={fileRef} type="file" accept="image/*" multiple className="hidden" onChange={pickImages} />
 
           {/* 标题 */}
-          <input
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="标题（选填）"
-            maxLength={40}
-            className="w-full rounded-2xl border border-ink/10 bg-white px-4 py-3.5 text-base font-medium outline-none focus:border-moss"
-          />
+          <Input value={title} onChange={setTitle} placeholder="标题（选填）" maxLength={40} />
 
           {/* 正文 */}
           <textarea
@@ -355,8 +346,8 @@ export default function ComposePage() {
             <EmotionPicker selected={tags} onChange={setTags} />
           </div>
 
-          {/* AI 开关（保留） */}
-          <label className="flex items-center justify-between rounded-2xl bg-white p-4 shadow-card">
+          {/* AI 开关 */}
+          <div className="flex items-center justify-between rounded-2xl bg-white p-4 shadow-card">
             <div className="flex items-center gap-2">
               <IconSparkle width={18} height={18} className="text-moss" />
               <div>
@@ -364,15 +355,8 @@ export default function ComposePage() {
                 <div className="text-xs text-ink/40">识别情绪、总结、原因与建议</div>
               </div>
             </div>
-            <button
-              role="switch"
-              aria-checked={analyze}
-              onClick={() => setAnalyze((v) => !v)}
-              className={`relative h-6 w-11 rounded-full transition-colors ${analyze ? 'bg-moss' : 'bg-ink/15'}`}
-            >
-              <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all ${analyze ? 'left-[22px]' : 'left-0.5'}`} />
-            </button>
-          </label>
+            <Switch checked={analyze} onCheckedChange={setAnalyze} ariaLabel="让 AI 帮我理解情绪" />
+          </div>
         </div>
       )}
 

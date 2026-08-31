@@ -10,6 +10,7 @@ export interface Plant {
   related_cognitive_patterns: string[]
   quote: string
   image_path: string
+  puzzle_image_path: string
   puzzle_piece_count: number
 }
 

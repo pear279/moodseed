@@ -3,6 +3,7 @@ import { buildLuckyCard } from '../lib/luck'
 import { analyzeRecord } from '../lib/ai'
 import { hasBanned, sanitize } from '../lib/security'
 import { orderedPlants, currentPlantOf, nextPlantOf, awardPieces, type ProgressRow } from '../lib/plants'
+import { REWARDS } from '../../src/lib/constants'
 
 const DAILY_PIECE_CAP = 3
 const STREAK_INTERVAL = 7
@@ -75,7 +76,14 @@ async function userRoutes(env: Env, method: string, segs: string[], request: Req
   if (method === 'POST' && segs.length === 1) {
     const { id } = await body(request)
     if (!id) return jsonError('缺少 id')
-    await db.prepare('INSERT INTO users (id) VALUES (?) ON CONFLICT(id) DO NOTHING').bind(id).run()
+    const ins = await db
+      .prepare('INSERT INTO users (id) VALUES (?) ON CONFLICT(id) DO NOTHING')
+      .bind(id)
+      .run()
+    // 新用户：第一个植物默认已解锁 34 块碎片（再获得 2 块即完成第一张拼图）
+    if (ins.meta?.changes === 1) {
+      await awardPieces(db, id, REWARDS.initialPiecesPerPlant)
+    }
     const row = await db.prepare('SELECT * FROM users WHERE id = ?').bind(id).first()
     return json(row)
   }
