@@ -63,14 +63,15 @@ async function main() {
     analyze: true,
   })
   const r1 = await mk(1)
-  assert(r1.json.pieceAwarded === 1 && r1.json.unlockedCount === 1, '第 1 条记录 +1 块')
+  assert(r1.json.pieceAwarded === 1 && r1.json.unlockedCount === 35, '第 1 条记录 +1 块（初始 34 → 35）')
   assert(r1.json.analysis === null && r1.json.record.ai_status === 'pending', 'AI 异步（保存即返回 pending）')
   const r2 = await mk(2)
+  assert(r2.json.unlockedCount === 36, '第 2 条后完成第一株（35 → 36）')
   const r3 = await mk(3)
-  assert(r3.json.unlockedCount === 3, '第 3 条后共 3 块')
+  assert(r3.json.unlockedCount === 1, '第 3 条后下一株 1 块')
   const r4 = await mk(4)
   assert(r4.json.pieceAwarded === 0, '第 4 条不再给碎片（日上限 3）')
-  assert(r4.json.unlockedCount === 3, '第 4 条后仍为 3 块')
+  assert(r4.json.unlockedCount === 1, '第 4 条后下一株仍为 1 块')
 
   // 3.1 AI 后台完成后回写（轮询第 1 条记录）
   let aiDone = false
@@ -90,11 +91,11 @@ async function main() {
 
   // 4. 进度（当前株 / locked 状态）
   const prog = await req('GET', `/api/progress?userId=${uid}`)
-  assert(prog.json.currentPlantId === 'cactus_boundary' && prog.json.nextPlantId === 'mushroom_calm', '当前株 cactus_boundary，下一株 mushroom_calm')
+  assert(prog.json.currentPlantId === 'mushroom_calm' && prog.json.nextPlantId === 'dandelion_release', '当前株 mushroom_calm，下一株 dandelion_release')
   const cactus = prog.json.progress.find((p) => p.plant_id === 'cactus_boundary')
   const mushroom = prog.json.progress.find((p) => p.plant_id === 'mushroom_calm')
-  assert(cactus.unlocked_count === 3 && cactus.status === 'active', 'cactus_boundary 3 块 active')
-  assert(mushroom.status === 'locked', '后续植物 locked')
+  assert(cactus.unlocked_count === 36 && cactus.status === 'completed', 'cactus_boundary 36 块 completed')
+  assert(mushroom.unlocked_count === 1 && mushroom.status === 'active', 'mushroom_calm 1 块 active')
 
   // 5. 积分兑换守卫（仅 1 分，不足 21）
   const ex = await req('POST', '/api/exchange', { userId: uid })
@@ -124,7 +125,7 @@ async function main() {
   // 7. 用户统计
   const stats = await req('GET', `/api/user/${uid}`)
   assert(stats.json.stats.total_days === 1 && stats.json.stats.streak_days === 1, '累计/连续 1 天')
-  assert(stats.json.stats.plants_unlocked === 0, '已解锁植物 0')
+  assert(stats.json.stats.plants_unlocked === 1, '已解锁植物 1（cactus 已完成）')
   assert(stats.json.activity?.[0]?.pieces === 3, '活动日历今日 3 块')
 
   // 8. 图片上传（R2）与回读
