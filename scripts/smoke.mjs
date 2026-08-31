@@ -90,11 +90,11 @@ async function main() {
 
   // 4. 进度（当前株 / locked 状态）
   const prog = await req('GET', `/api/progress?userId=${uid}`)
-  assert(prog.json.currentPlantId === 'mushroom_calm' && prog.json.nextPlantId === 'cactus_boundary', '当前株 mushroom_calm，下一株 cactus_boundary')
-  const mint = prog.json.progress.find((p) => p.plant_id === 'mushroom_calm')
-  const cactusBoundary = prog.json.progress.find((p) => p.plant_id === 'cactus_boundary')
-  assert(mint.unlocked_count === 3 && mint.status === 'active', 'mushroom_calm 3 块 active')
-  assert(cactusBoundary.status === 'locked', '后续植物 locked')
+  assert(prog.json.currentPlantId === 'cactus_boundary' && prog.json.nextPlantId === 'mushroom_calm', '当前株 cactus_boundary，下一株 mushroom_calm')
+  const cactus = prog.json.progress.find((p) => p.plant_id === 'cactus_boundary')
+  const mushroom = prog.json.progress.find((p) => p.plant_id === 'mushroom_calm')
+  assert(cactus.unlocked_count === 3 && cactus.status === 'active', 'cactus_boundary 3 块 active')
+  assert(mushroom.status === 'locked', '后续植物 locked')
 
   // 5. 积分兑换守卫（仅 1 分，不足 21）
   const ex = await req('POST', '/api/exchange', { userId: uid })

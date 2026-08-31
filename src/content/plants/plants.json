@@ -1,19 +1,7 @@
 [
   {
-    "id": "mushroom_calm",
-    "order": 1,
-    "plant_name": "蘑菇",
-    "card_name": "蘑菇-平静",
-    "emotion_theme": "平静",
-    "related_emotions": ["anxious", "nervous", "insecure", "stressed", "irritable", "scared", "overwhelmed", "confused", "tired"],
-    "related_cognitive_patterns": ["catastrophizing", "fortune_telling", "mind_reading", "black_white", "should_thinking", "emotional_reasoning"],
-    "quote": "有些事情不用现在解决，先让心慢下来。",
-    "image_path": "/plants/mushroom.png",
-    "puzzle_piece_count": 36
-  },
-  {
     "id": "cactus_boundary",
-    "order": 2,
+    "order": 1,
     "plant_name": "仙人掌",
     "card_name": "仙人掌-边界",
     "emotion_theme": "边界",
@@ -21,6 +9,18 @@
     "related_cognitive_patterns": ["should_thinking", "personalization", "mind_reading", "comparison", "self_labeling", "emotional_reasoning"],
     "quote": "保护自己的边界，也是一种温柔。",
     "image_path": "/plants/cactus.png",
+    "puzzle_piece_count": 36
+  },
+  {
+    "id": "mushroom_calm",
+    "order": 2,
+    "plant_name": "蘑菇",
+    "card_name": "蘑菇-平静",
+    "emotion_theme": "平静",
+    "related_emotions": ["anxious", "nervous", "insecure", "stressed", "irritable", "scared", "overwhelmed", "confused", "tired"],
+    "related_cognitive_patterns": ["catastrophizing", "fortune_telling", "mind_reading", "black_white", "should_thinking", "emotional_reasoning"],
+    "quote": "有些事情不用现在解决，先让心慢下来。",
+    "image_path": "/plants/mushroom.png",
     "puzzle_piece_count": 36
   },
   {
