@@ -268,15 +268,17 @@ function PlantView({ view, onPlay }: { view: View; onPlay: (plant: Plant) => voi
         </div>
       </div>
 
-      <div className="flex-1">
-        <CollectionPuzzleBoard
-          theme={getPuzzleThemeById(view.plant.id)!}
-          unlockedIds={new Set(view.progress.positions)}
-          className="h-full w-full"
-        />
+      <div className="w-full">
+        <div className="aspect-square w-full">
+          <CollectionPuzzleBoard
+            theme={getPuzzleThemeById(view.plant.id)!}
+            unlockedIds={new Set(view.progress.positions)}
+            className="h-full w-full"
+          />
+        </div>
       </div>
 
-      <p className="mt-2 text-center text-sm text-ink/60">「{view.plant.quote}」</p>
+      <p className="mt-auto text-center text-sm text-ink/60">「{view.plant.quote}」</p>
 
       <button
         disabled
