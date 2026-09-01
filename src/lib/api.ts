@@ -130,4 +130,11 @@ export const api = {
     const data = (await res.json()) as { secure_url: string }
     return data.secure_url
   },
+
+  // —— 情绪搭子对话 ——
+  chat: (messages: { role: 'user' | 'assistant'; content: string }[]) =>
+    request<{ reply: string }>(`/api/chat`, {
+      method: 'POST',
+      body: JSON.stringify({ messages }),
+    }),
 }

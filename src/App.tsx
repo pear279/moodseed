@@ -8,6 +8,7 @@ import PuzzlePage from './pages/PuzzlePage'
 import MePage from './pages/MePage'
 import ComposePage from './pages/ComposePage'
 import BottlePage from './pages/BottlePage'
+import ChatPage from './pages/ChatPage'
 import PuzzlePlayPage from './pages/PuzzlePlayPage'
 import PhonePreview from './pages/PhonePreview'
 
@@ -46,6 +47,7 @@ function AppRoutes() {
       <Route path="/compose" element={<ComposePage />} />
       <Route path="/compose/:id" element={<ComposePage />} />
       <Route path="/bottle" element={<BottlePage />} />
+      <Route path="/chat" element={<ChatPage />} />
       <Route path="/play/:plantId" element={<PuzzlePlayPage />} />
       <Route path="/phone-preview" element={<PhonePreview />} />
       <Route path="*" element={<Navigate to={onboarded ? '/record' : '/onboarding'} replace />} />

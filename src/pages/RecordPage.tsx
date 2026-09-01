@@ -9,7 +9,8 @@ import type { CheckinToday, RecordItem } from '../lib/types'
 import { ImageCollage } from '../components/ImageCollage'
 import { Button } from '@/components/motion/button'
 import { Spotlight, TextEffect } from '@/components/core'
-import { IconCheck, IconChevronDown, IconPlus, IconSparkle } from '../components/icons'
+import { IconCheck, IconChevronDown, IconPlus, IconSparkle, IconMessage, IconRefresh } from '../components/icons'
+import { getBuddyAvatar, toggleBuddyId } from '../lib/avatar'
 
 function greeting(): string {
   const h = new Date().getHours()
@@ -141,6 +142,7 @@ export default function RecordPage() {
   const [checkingIn, setCheckingIn] = useState(false)
   const [justChecked, setJustChecked] = useState(false)
   const [error, setError] = useState('')
+  const [buddy, setBuddy] = useState(getBuddyAvatar())
 
   const load = useCallback(async () => {
     if (!user) return
@@ -293,6 +295,33 @@ export default function RecordPage() {
           </div>
         </section>
       )}
+
+      {/* 情绪搭子入口 */}
+      <section className="mt-5">
+        <div className="flex items-center gap-4 rounded-2xl bg-white p-4 shadow-card">
+          <div className="flex shrink-0 flex-col items-center">
+            <img
+              src={buddy}
+              alt="情绪搭子"
+              className="h-14 w-14 rounded-full object-cover ring-2 ring-lime/40"
+            />
+            <button
+              onClick={() => setBuddy(toggleBuddyId())}
+              className="-mt-1.5 grid h-6 w-6 place-items-center rounded-full bg-sand text-ink/50 shadow-card active:bg-lime/30"
+              aria-label="切换搭子头像"
+            >
+              <IconRefresh width={13} height={13} />
+            </button>
+          </div>
+          <button
+            onClick={() => navigate('/chat')}
+            className="flex flex-1 items-center justify-between rounded-2xl bg-moss px-5 py-4 text-white active:bg-leaf"
+          >
+            <span className="text-base font-semibold">情绪搭子</span>
+            <IconMessage width={20} height={20} className="opacity-80" />
+          </button>
+        </div>
+      </section>
 
       {/* 添加记录入口 */}
       <Button onClick={() => navigate('/compose')} size="lg" className="mt-5 w-full">

@@ -4,6 +4,7 @@ import { analyzeRecord } from '../lib/ai'
 import { hasBanned, sanitize } from '../lib/security'
 import { orderedPlants, currentPlantOf, nextPlantOf, awardPieces, type ProgressRow } from '../lib/plants'
 import { REWARDS } from '../../src/lib/constants'
+import { chat } from '../lib/chat'
 
 const DAILY_PIECE_CAP = 3
 const STREAK_INTERVAL = 7
@@ -598,7 +599,20 @@ async function bottleRoutes(env: Env, method: string, segs: string[], request: R
   return jsonError('Not found', 404)
 }
 
-// ============ 上传 / 图片 ============
+// ============ 情绪搭子对话 ============
+async function chatRoute(env: Env, request: Request) {
+  const p = await body(request)
+  const messages = Array.isArray(p.messages)
+    ? (p.messages as { role: string; content: string }[])
+        .filter((m) => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
+        .map((m) => ({ role: m.role as 'user' | 'assistant', content: sanitize(m.content, 2000) }))
+        .slice(-20)
+    : []
+  if (messages.length === 0) return jsonError('缺少消息')
+  const reply = await chat(env, messages)
+  return json({ reply })
+}
+
 // ============ 路由分发 ============
 export async function onRequest(context: any): Promise<Response> {
   const { request, env } = context
@@ -615,6 +629,7 @@ export async function onRequest(context: any): Promise<Response> {
     if (segs[0] === 'progress') return await progressRoute(env, request)
     if (segs[0] === 'exchange') return await exchangeRoute(env, request)
     if (segs[0] === 'bottles') return await bottleRoutes(env, method, segs, request)
+    if (segs[0] === 'chat') return await chatRoute(env, request)
     return jsonError('Not found', 404)
   } catch (e) {
     return jsonError(e instanceof Error ? e.message : '服务器错误', 500)

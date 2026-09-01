@@ -123,3 +123,30 @@ export const IconLock = (p: P) => (
     <path d="M8 11V7a4 4 0 0 1 8 0v4" />
   </svg>
 )
+
+export const IconRefresh = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M21 12a9 9 0 1 1-2.64-6.36" />
+    <path d="M21 3v6h-6" />
+  </svg>
+)
+
+export const IconSend = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M22 2 11 13" />
+    <path d="M22 2l-7 20-4-9-9-4z" />
+  </svg>
+)
+
+export const IconMessage = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+  </svg>
+)
+
+export const IconCamera = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+    <circle cx="12" cy="13" r="4" />
+  </svg>
+)

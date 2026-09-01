@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useApp } from '../context/AppContext'
 import { api } from '../lib/api'
 import { REWARDS, TIMEZONE, todayStr } from '../lib/constants'
@@ -14,7 +14,8 @@ import {
   useAnimatedToastStack,
 } from '@/components/ui'
 import { AnimatedNumber, GlowEffect, Tilt } from '@/components/core'
-import { IconClose } from '../components/icons'
+import { IconCamera, IconClose } from '../components/icons'
+import { getUserAvatar, setUserAvatar } from '../lib/avatar'
 
 const MBTI = ['INTJ', 'INTP', 'ENTJ', 'ENTP', 'INFJ', 'INFP', 'ENFJ', 'ENFP', 'ISTJ', 'ISFJ', 'ESTJ', 'ESFJ', 'ISTP', 'ISFP', 'ESTP', 'ESFP']
 
@@ -86,6 +87,9 @@ export default function MePage() {
   const [monthView, setMonthView] = useState(false)
   const [editing, setEditing] = useState(false)
   const [exchanging, setExchanging] = useState(false)
+  const [avatar, setAvatar] = useState<string | null>(getUserAvatar())
+  const [avatarMenu, setAvatarMenu] = useState(false)
+  const fileRef = useRef<HTMLInputElement>(null)
   const { toasts, showToast, dismissToast } = useAnimatedToastStack({ defaultDuration: 3200 })
 
   const load = useCallback(async () => {
@@ -154,13 +158,57 @@ export default function MePage() {
 
   const canExchange = (user?.points ?? 0) >= REWARDS.pointsPerPiece
 
+  const changeAvatar = async (file: File) => {
+    try {
+      const url = await api.uploadImage(file)
+      setUserAvatar(url)
+      setAvatar(url)
+      setAvatarMenu(false)
+      showToast({ status: 'success', title: '头像已更新' })
+    } catch {
+      showToast({ status: 'error', title: '上传失败，请重试' })
+    }
+  }
+
   return (
     <div className="px-5 pb-24 pt-6">
       {/* 个人信息 */}
       <Tilt rotationFactor={6}>
         <section className="relative flex items-center gap-4 overflow-hidden rounded-2xl bg-white p-5 shadow-card">
           <GlowEffect colors={['#6faf6f', '#d9e8d3']} mode="breathe" blur="soft" duration={6} />
-          <div className="relative grid h-14 w-14 place-items-center rounded-2xl bg-lime/40 text-2xl">🌿</div>
+          <div className="relative shrink-0">
+            <button
+              onClick={() => setAvatarMenu((v) => !v)}
+              className="grid h-14 w-14 place-items-center overflow-hidden rounded-full bg-lime/40 text-2xl"
+              aria-label="头像"
+            >
+              {avatar ? <img src={avatar} alt="头像" className="h-full w-full object-cover" /> : '🌿'}
+            </button>
+            {avatarMenu && (
+              <div className="absolute left-0 top-16 z-10 w-32 rounded-xl bg-white p-1.5 shadow-card">
+                <button
+                  onClick={() => {
+                    setAvatarMenu(false)
+                    fileRef.current?.click()
+                  }}
+                  className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-ink/80 active:bg-ink/5"
+                >
+                  <IconCamera width={16} height={16} /> 更换头像
+                </button>
+              </div>
+            )}
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0]
+                if (f) changeAvatar(f)
+                e.target.value = ''
+              }}
+            />
+          </div>
           <div className="relative min-w-0 flex-1">
             <div className="truncate text-lg font-semibold">{user?.nickname}</div>
             <div className="mt-0.5 text-xs text-ink/50">
