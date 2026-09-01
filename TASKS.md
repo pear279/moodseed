@@ -81,6 +81,13 @@
 - [~] 8.7 Watermelon UI：registry 不可访问（SPA 404）+ CLI 崩溃，Me 页 Bento 手写实现，待 registry 可访问后替换
 - [~] 8.8 Impeccable audit：contrast/圆角/动效规则内联执行，浏览器视觉验收待恢复
 
+## Phase 9 — 情绪搭子对话 ✅
+> 记录页「情绪搭子」入口 + 对话页 + `/api/chat`（DeepSeek+CBT）+ 我的页自定义头像。
+- [x] 9.1 记录页对话入口：左圆形头像（boy/girl 可切换）+ 右「情绪搭子」按钮
+- [x] 9.2 ChatPage：搭子/用户头像气泡 + 底部输入发送 + 多轮记忆（localStorage）
+- [x] 9.3 `/api/chat`：CBT 系统提示词 + 情绪识别/原因分析/委婉建议 + 敏感词委婉提示 + 危机兜底（已部署验证）
+- [x] 9.4 我的页用户头像：点击弹「更换头像」+ Cloudinary 上传 + 显示
+
 ## 验收清单（对照 PRODUCT.md）
 - [x] 核心闭环后端完整跑通（引导→记录→AI→碎片→修复→36块→翻牌→下一株）——API 层已 curl 验证
 - [~] 三页 + 引导 UI 浏览器端到端验证（浏览器因切换标签暂停，待恢复）
