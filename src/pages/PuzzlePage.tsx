@@ -122,10 +122,12 @@ export default function PuzzlePage() {
 
   const currentView = views[index]
   const headerPlant = currentView?.plant ?? null
-  const headerStatus =
-    currentView && currentView.kind !== 'locked'
-      ? `${currentView.progress.unlocked_count} / ${REWARDS.piecesPerPlant}`
-      : ''
+  const headerCount = currentView
+    ? currentView.kind === 'locked'
+      ? 0
+      : currentView.progress.unlocked_count
+    : null
+  const headerStatus = headerCount !== null ? `${headerCount} / ${REWARDS.piecesPerPlant}` : ''
 
   return (
     <div className="flex h-full flex-col overflow-hidden px-5">
@@ -151,7 +153,7 @@ export default function PuzzlePage() {
       </header>
 
       {/* 中部拼图区：拼图 + 左右箭头 + 金句/按钮 */}
-      <div className="relative flex-1 overflow-hidden">
+      <div className="relative min-h-0 flex-1 overflow-hidden">
         {index > 0 && (
           <button
             onClick={() => setIndex((i) => Math.max(i - 1, 0))}
@@ -178,19 +180,28 @@ export default function PuzzlePage() {
         >
           {views.map((v) => (
             <div key={v.plant.id} className="h-full w-full shrink-0">
-              <PlantView view={v} onPlay={(plant) => navigate(`/play/${plant.id}`)} />
+              <PlantView view={v} />
             </div>
           ))}
         </div>
       </div>
 
-      {/* 底部操作区：切换提示 + 漂流瓶入口 */}
-      <div className="mt-auto pb-6">
-        <div className="flex items-center justify-center gap-3 text-xs text-ink/30">
-          <span>← 已完成</span>
-          <span className="h-1 w-1 rounded-full bg-ink/20" />
-          <span>下一株 →</span>
-        </div>
+      {/* 底部操作区：主按钮 + 漂流瓶入口 */}
+      <div className="mt-auto flex flex-col pb-6">
+        {currentView?.kind === 'current' && (
+          <button
+            disabled
+            className="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-full bg-sand py-2.5 text-sm font-medium text-stone/70"
+          >
+            <IconLock width={16} height={16} />
+            待解锁
+          </button>
+        )}
+        {currentView?.kind === 'completed' && (
+          <Button onClick={() => navigate(`/play/${currentView.plant.id}`)} className="w-full">
+            玩拼图
+          </Button>
+        )}
         <button
           onClick={() => navigate('/bottle')}
           className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-sand py-2.5 text-sm font-medium text-ink/70 active:bg-lime/30"
@@ -233,12 +244,16 @@ export default function PuzzlePage() {
   )
 }
 
-function PlantView({ view, onPlay }: { view: View; onPlay: (plant: Plant) => void }) {
+function PlantView({ view }: { view: View }) {
   if (view.kind === 'locked') {
     return (
-      <div className="flex h-full flex-col items-center justify-center">
+      <div className="flex h-full min-h-0 flex-col items-center justify-center overflow-hidden">
         <div className="relative w-full max-w-[280px]">
-          <img src={view.plant.image_path} alt="" className="w-full grayscale opacity-40" />
+          <img
+            src={view.plant.image_path}
+            alt=""
+            className="aspect-square w-full object-cover grayscale opacity-40"
+          />
           <div className="absolute inset-0 grid place-items-center">
             <div className="flex flex-col items-center gap-2 rounded-2xl bg-ink/50 px-6 py-4 text-white backdrop-blur">
               <IconLock width={22} height={22} />
@@ -253,7 +268,7 @@ function PlantView({ view, onPlay }: { view: View; onPlay: (plant: Plant) => voi
 
   if (view.kind === 'completed') {
     return (
-      <div className="flex h-full flex-col items-center justify-center">
+      <div className="flex h-full min-h-0 flex-col items-center justify-center overflow-hidden">
         <TiltCard className="w-full max-w-[240px] bg-white shadow-card">
           <img src={view.plant.image_path} alt={view.plant.plant_name} className="aspect-[3/4] w-full object-cover" />
           <div className="p-3 text-center">
@@ -263,36 +278,22 @@ function PlantView({ view, onPlay }: { view: View; onPlay: (plant: Plant) => voi
             </div>
           </div>
         </TiltCard>
-
-        <Button onClick={() => onPlay(view.plant)} className="mt-3 w-full max-w-[240px]">
-          玩拼图
-        </Button>
       </div>
     )
   }
 
   // current
   return (
-    <div className="flex h-full flex-col items-center justify-center">
-      <div className="w-full">
-        <div className="aspect-square w-full">
-          <CollectionPuzzleBoard
-            theme={getPuzzleThemeById(view.plant.id)!}
-            unlockedIds={new Set(view.progress.positions)}
-            className="h-full w-full"
-          />
-        </div>
+    <div className="flex h-full min-h-0 flex-col items-center justify-center overflow-hidden">
+      <div className="flex min-h-0 w-full flex-1 items-center justify-center">
+        <CollectionPuzzleBoard
+          theme={getPuzzleThemeById(view.plant.id)!}
+          unlockedIds={new Set(view.progress.positions)}
+          className="aspect-square max-h-full max-w-full w-full"
+        />
       </div>
 
-      <p className="mt-4 text-center text-sm text-ink/60">「{view.plant.quote}」</p>
-
-      <button
-        disabled
-        className="mt-4 flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-full bg-sand py-2.5 text-sm font-medium text-stone/70"
-      >
-        <IconLock width={16} height={16} />
-        待解锁
-      </button>
+      <p className="mt-4 shrink-0 text-center text-sm text-ink/60">「{view.plant.quote}」</p>
     </div>
   )
 }
