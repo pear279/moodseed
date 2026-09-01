@@ -89,6 +89,7 @@ export default function MePage() {
   const [exchanging, setExchanging] = useState(false)
   const [avatar, setAvatar] = useState<string | null>(getUserAvatar())
   const [avatarMenu, setAvatarMenu] = useState(false)
+  const [uploadingAvatar, setUploadingAvatar] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
   const { toasts, showToast, dismissToast } = useAnimatedToastStack({ defaultDuration: 3200 })
 
@@ -159,6 +160,7 @@ export default function MePage() {
   const canExchange = (user?.points ?? 0) >= REWARDS.pointsPerPiece
 
   const changeAvatar = async (file: File) => {
+    setUploadingAvatar(true)
     try {
       const url = await api.uploadImage(file)
       setUserAvatar(url)
@@ -167,6 +169,8 @@ export default function MePage() {
       showToast({ status: 'success', title: '头像已更新' })
     } catch {
       showToast({ status: 'error', title: '上传失败，请重试' })
+    } finally {
+      setUploadingAvatar(false)
     }
   }
 
@@ -178,25 +182,12 @@ export default function MePage() {
           <GlowEffect colors={['#6faf6f', '#d9e8d3']} mode="breathe" blur="soft" duration={6} />
           <div className="relative shrink-0">
             <button
-              onClick={() => setAvatarMenu((v) => !v)}
+              onClick={() => setAvatarMenu(true)}
               className="grid h-14 w-14 place-items-center overflow-hidden rounded-full bg-lime/40 text-2xl"
-              aria-label="头像"
+              aria-label="更换头像"
             >
               {avatar ? <img src={avatar} alt="头像" className="h-full w-full object-cover" /> : '🌿'}
             </button>
-            {avatarMenu && (
-              <div className="absolute left-0 top-16 z-10 w-32 rounded-xl bg-white p-1.5 shadow-card">
-                <button
-                  onClick={() => {
-                    setAvatarMenu(false)
-                    fileRef.current?.click()
-                  }}
-                  className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-ink/80 active:bg-ink/5"
-                >
-                  <IconCamera width={16} height={16} /> 更换头像
-                </button>
-              </div>
-            )}
             <input
               ref={fileRef}
               type="file"
@@ -312,6 +303,30 @@ export default function MePage() {
       <AnimatedToastStack toasts={toasts} onDismiss={dismissToast} position="bottom-center" placement="fixed" />
 
       {editing && <ProfileModal onClose={() => setEditing(false)} />}
+
+      {avatarMenu && (
+        <div
+          className="fixed inset-0 z-50 grid place-items-center bg-ink/40 px-8 backdrop-blur-sm"
+          onClick={() => setAvatarMenu(false)}
+        >
+          <div
+            className="w-full max-w-xs animate-pop-in rounded-3xl bg-cream p-6 text-center shadow-glow"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="mx-auto grid h-24 w-24 place-items-center overflow-hidden rounded-full bg-lime/40 text-4xl">
+              {avatar ? <img src={avatar} alt="头像" className="h-full w-full object-cover" /> : '🌿'}
+            </div>
+            <button
+              onClick={() => fileRef.current?.click()}
+              disabled={uploadingAvatar}
+              className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-moss py-3 font-medium text-white active:bg-leaf disabled:opacity-60"
+            >
+              <IconCamera width={18} height={18} />
+              {uploadingAvatar ? '上传中…' : '更换头像'}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
