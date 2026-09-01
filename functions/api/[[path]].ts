@@ -13,7 +13,6 @@ const DAILY_BOTTLE_CAP = 5
 
 interface Env {
   DB: any
-  R2: any
   DEEPSEEK_API_KEY?: string
   DEEPSEEK_BASE_URL?: string
   DEEPSEEK_MODEL?: string
@@ -600,29 +599,6 @@ async function bottleRoutes(env: Env, method: string, segs: string[], request: R
 }
 
 // ============ 上传 / 图片 ============
-async function uploadRoute(env: Env, request: Request) {
-  const form = await request.formData()
-  const file = form.get('file')
-  if (!file || typeof file === 'string') return jsonError('缺少文件')
-  const f = file as File
-  const ext = (f.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '')
-  const key = `images/${uuid()}.${ext || 'jpg'}`
-  await env.R2.put(key, await f.arrayBuffer(), {
-    httpMetadata: { contentType: f.type || 'image/jpeg' },
-  })
-  return json({ url: `/api/image/${key}` })
-}
-
-async function serveImage(env: Env, key: string) {
-  const obj = await env.R2.get(key)
-  if (!obj) return new Response('Not found', { status: 404 })
-  const headers = new Headers()
-  obj.writeHttpMetadata(headers)
-  headers.set('Cache-Control', 'public, max-age=31536000, immutable')
-  headers.set('etag', obj.httpEtag)
-  return new Response(obj.body, { headers })
-}
-
 // ============ 路由分发 ============
 export async function onRequest(context: any): Promise<Response> {
   const { request, env } = context
@@ -633,14 +609,12 @@ export async function onRequest(context: any): Promise<Response> {
     typeof context.waitUntil === 'function' ? (p: Promise<unknown>) => context.waitUntil(p) : undefined
 
   try {
-    if (segs[0] === 'image' && segs[1]) return await serveImage(env, segs.slice(1).join('/'))
     if (segs[0] === 'user') return await userRoutes(env, method, segs, request)
     if (segs[0] === 'checkin') return await checkinRoutes(env, method, segs, request)
     if (segs[0] === 'records') return await recordRoutes(env, method, segs, request, waitUntil)
     if (segs[0] === 'progress') return await progressRoute(env, request)
     if (segs[0] === 'exchange') return await exchangeRoute(env, request)
     if (segs[0] === 'bottles') return await bottleRoutes(env, method, segs, request)
-    if (segs[0] === 'upload' && method === 'POST') return await uploadRoute(env, request)
     return jsonError('Not found', 404)
   } catch (e) {
     return jsonError(e instanceof Error ? e.message : '服务器错误', 500)

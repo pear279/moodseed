@@ -70,12 +70,12 @@ AI 聊天/陪聊/AI 陪伴角色/多轮咨询/AI 长期记忆、手机号/微信
 1. 完整跑通核心闭环：引导 → 记录 → AI 分析 → 得碎片 → 植物恢复 → 36 块完成 → 翻牌 → 下一株。
 2. 三个一级页面（记录/拼图/我的）与首次引导全部可用、移动端流畅。
 3. 奖励规则（每日3块、连续7天+3、21分兑1块、每日5瓶）在代码里正确落地。
-4. 真实部署到 Cloudflare（Pages + D1 + R2）并可公网访问。
+4. 真实部署到 Cloudflare（Pages + D1 + Cloudinary）并可公网访问。
 5. 项目文件标准化（PRODUCT/ARCHITECTURE/TASKS/AGENTS/README），可直接推 GitHub。
 
 ## Open questions / 待用户确认
 
 - **DeepSeek API Key**：通过环境变量注入；缺省时走本地规则兜底（demo 仍可跑通），不阻塞开发。
-- **Cloudflare 账号**：部署需用户提供；本地可先用 `wrangler pages dev` + 本地 D1/R2 模拟完整验证。
+- **Cloudflare 账号**：部署需用户提供；本地可先用 `wrangler pages dev` + 本地 D1 模拟完整验证（图片上传走 Cloudinary 直传，无需本地 R2）。
 - **植物插画**：demo 先用内置 SVG 插画（自包含、轻量），真实高质量 PNG 可后续替换。
 - **植物数量**：按 3 株（+2 预留）落地，可在 `data/plants.json` 扩展。

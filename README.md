@@ -22,7 +22,7 @@ Moodseed 是一款以 **情绪记录 + 认知行为疗法(CBT) + 植物拼图成
 - **前端**：React + Vite + TypeScript + Tailwind CSS + Three.js + react-router（HashRouter）
 - **后端**：Cloudflare Pages Functions（Workers 运行时）
 - **数据库**：Cloudflare D1（SQLite）
-- **存储**：Cloudflare R2（用户上传图片）
+- **存储**：Cloudinary（用户上传图片，unsigned 直传 + CDN）
 - **AI**：DeepSeek API（`deepseek-v4-flash`，Non-Thinking + JSON 输出），缺 Key 时自动走本地规则兜底
 - **黄历/星座**：`lunar-javascript`（仅后端）
 
@@ -34,7 +34,7 @@ Moodseed 是一款以 **情绪记录 + 认知行为疗法(CBT) + 植物拼图成
 moodseed/
 ├── PRODUCT.md / ARCHITECTURE.md / TASKS.md / AGENTS.md   # 产品与技术文档
 ├── src/                  # React 前端 + 内容知识库（content/）与读取层（lib/content/）
-├── functions/            # Pages Functions（API + D1/R2/DeepSeek）
+├── functions/            # Pages Functions（API + D1/DeepSeek）
 ├── migrations/           # D1 迁移 SQL
 ├── public/               # 植物插画 PNG 等静态资源
 ├── references/           # 原始素材（内容库 Markdown、植物/纹理参考图）
@@ -72,8 +72,9 @@ pnpm test    # API 冒烟测试（需先 pnpm dev:api；覆盖签到幂等/日�
 pnpm build                              # 1. 构建前端
 wrangler login                          # 2. 登录 Cloudflare
 wrangler d1 create moodseed-db          # 3. 创建 D1，把返回的 database_id 填入 wrangler.jsonc
-wrangler r2 bucket create moodseed-images  # 4. 创建 R2 桶
-wrangler d1 migrations apply moodseed-db --remote   # 5. 线上执行迁移
+wrangler d1 migrations apply moodseed-db --remote   # 4. 线上执行迁移
+# 5. 图片上传走 Cloudinary：控制台建 unsigned upload preset，
+#    把 cloud_name/upload_preset 填进 src/lib/api.ts（无需 R2）
 wrangler pages secret put DEEPSEEK_API_KEY   # 6. （可选）配置 DeepSeek Key
 wrangler pages deploy dist              # 7. 部署到 Pages（首次会提示项目名）
 ```

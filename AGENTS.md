@@ -9,7 +9,7 @@
 ```bash
 pnpm install          # 装依赖
 pnpm dev              # Vite 前端本地开发
-pnpm dev:api          # wrangler pages dev（本地 D1/R2/Functions）
+pnpm dev:api          # wrangler pages dev（本地 D1/Functions）
 pnpm build            # tsc + vite build
 pnpm preview          # 预览构建产物
 pnpm test             # API 冒烟测试（需先 pnpm dev:api）
@@ -22,7 +22,7 @@ pnpm db:migrate:prod  # 线上 D1 迁移（需 Cloudflare 登录）
 - API 通过 `src/lib/api.ts` 统一调用，不直接 fetch。
 - 用户身份用 `localStorage` 的 `moodseed_uid`，首屏确保已 get-or-create。
 - 时区统一 `Asia/Shanghai`。
-- 敏感信息（DeepSeek Key、R2 密钥）只进 `.dev.vars` / Cloudflare secrets，**绝不提交**；`.gitignore` 必须排除。
+- 敏感信息（DeepSeek Key、Cloudinary Secret 等）只进 `.dev.vars` / Cloudflare secrets，**绝不提交**；`.gitignore` 必须排除。
 - 移动端优先：一切页面先过 375px 宽度。
 
 ## 每个任务完成前（Product Quality Gate）

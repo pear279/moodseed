@@ -9,6 +9,10 @@ import type {
   UserStats,
 } from './types'
 
+// Cloudinary 图片直传配置（unsigned upload preset，无需后端/R2）
+const CLOUDINARY_CLOUD_NAME = 'fhxppzq9'
+const CLOUDINARY_UPLOAD_PRESET = 'moodseed_upload'
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(path, {
     headers: { 'Content-Type': 'application/json' },
@@ -113,13 +117,17 @@ export const api = {
       body: JSON.stringify({ userId }),
     }),
 
-  // —— 图片上传 ——
+  // —— 图片上传（Cloudinary 直传，unsigned preset）——
   uploadImage: async (file: File): Promise<string> => {
     const form = new FormData()
     form.append('file', file)
-    const res = await fetch('/api/upload', { method: 'POST', body: form })
+    form.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+    const res = await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+      { method: 'POST', body: form },
+    )
     if (!res.ok) throw new Error('图片上传失败')
-    const data = (await res.json()) as { url: string }
-    return data.url
+    const data = (await res.json()) as { secure_url: string }
+    return data.secure_url
   },
 }

@@ -11,11 +11,11 @@
 | 农历/星座 | lunar-javascript | 黄历宜忌、星座、干支（本地，不调付费 API） |
 | 后端 | Cloudflare Pages Functions（基于 Workers） | 一体化承载 API |
 | 数据库 | Cloudflare D1（SQLite） | 用户/记录/签到/进度/漂流瓶 |
-| 存储 | Cloudflare R2 | 用户上传的记录图片 |
+| 存储 | Cloudinary（unsigned 直传 + CDN） | 用户上传的记录图片 |
 | AI | DeepSeek API（OpenAI 兼容，`deepseek-v4-flash`，Non-Thinking） | 单条记录分析；模型名可配，缺 Key 走本地兜底 |
 | 部署 | Cloudflare Pages | 前端静态 + Functions API 一次部署 |
 
-> 选型原则：**Cloudflare 一套跑完**，服务数量最少、无跨平台运维。Pages Functions 与单独 Workers 是同一运行时，用 `functions/` 目录即可在同一项目内绑定 D1 + R2，省掉独立 Worker 的部署与域名管理。
+> 选型原则：**Cloudflare 一套跑完**，服务数量最少、无跨平台运维。Pages Functions 与单独 Workers 是同一运行时，用 `functions/` 目录即可在同一项目内绑定 D1，省掉独立 Worker 的部署与域名管理。
 
 ## System / components
 
@@ -29,7 +29,7 @@ Cloudflare Pages
   ├─ 静态资源 (React build)
   └─ functions/api/[[path]].ts  →  路由分发
         ├─ D1 (数据库)
-        ├─ R2 (图片存储)
+        ├─ Cloudinary (图片直传/CDN)
         └─ DeepSeek API (记录分析代理)
 ```
 
@@ -94,7 +94,6 @@ comments(id TEXT PK, bottle_id TEXT, user_id TEXT, content TEXT,
 | POST | `/api/records/:id/analyze` | 手动重新触发 AI 分析 |
 | GET | `/api/progress?userId=` | 全部植物进度（当前/已完成/下一株） |
 | POST | `/api/exchange` | 21 积分兑 1 块 |
-| POST | `/api/upload` | R2 上传（返回图片 URL） |
 | GET | `/api/bottles/random?userId=&plantId=` | 随机漂流瓶（每日限 5） |
 | POST | `/api/bottles` | 发布漂流瓶 |
 | GET | `/api/bottles/:id` | 漂流瓶 + 一级评论 |
@@ -103,7 +102,7 @@ comments(id TEXT PK, bottle_id TEXT, user_id TEXT, content TEXT,
 | POST | `/api/bottles/:id/report` | 举报（置 hidden） |
 | DELETE | `/api/bottles/:id` | 删除自己内容（置 deleted） |
 
-> 图片上传：经 `/api/upload` 上传到 R2，图片通过 **Functions 代理**（`GET /api/image/:key` 读 R2 返回）访问，`records.images`（JSON 数组）存相对路径 `/api/image/:key`。这样**无需配置 R2 公共桶 / r2.dev 子域 / 自定义域名**，对 demo 更稳、零额外运维。
+> 图片上传：前端经 **Cloudinary unsigned upload preset 直传**（`POST https://api.cloudinary.com/v1_1/<cloud_name>/image/upload`），返回 `secure_url` 直接存入 `records.images`。无需后端代理、无需 R2/第三方服务器，图片经 Cloudinary CDN 分发。
 
 ## Key interactions
 
@@ -124,7 +123,7 @@ moodseed/
 ├── wrangler.jsonc / .dev.vars.example / .gitignore / index.html
 ├── src/content/     # 内容知识库（plants/cbt/fortune，JSON 配置化）
 ├── src/lib/content/ # 内容统一读取层（供前端 + functions 共用）
-├── functions/api/   # Pages Functions 路由（D1/R2/DeepSeek 代理）
+├── functions/api/   # Pages Functions 路由（D1/DeepSeek 代理）
 ├── migrations/      # D1 迁移 SQL
 ├── scripts/         # 种子/工具脚本
 ├── public/          # favicon、植物插画等静态资源

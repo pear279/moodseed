@@ -6,6 +6,5 @@
   "d1_databases": [
     { "binding": "DB", "database_name": "moodseed-db", "database_id": "cf23a82d-04f4-4e0b-90d6-5557df4252e3" }
   ]
-  // NOTE: r2_buckets 临时移除 —— 账号尚未启用 R2（错误 10042）。
-  // 开通 R2 后恢复： "r2_buckets": [ { "binding": "R2", "bucket_name": "moodseed-images" } ]
+  // 图片上传已改用 Cloudinary 直传（unsigned preset），不再依赖 R2
 }
