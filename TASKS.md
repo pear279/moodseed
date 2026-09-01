@@ -54,7 +54,7 @@
 - [~] 6.2 移动端适配与细节文案
 - [~] 6.3 内容安全自查 + 移除 mock（无 mock 遗留，`ai` 兜底为正式降级逻辑）
 - [x] 6.4 README（本地跑/部署步骤/环境变量）
-- [ ] 6.5 `pnpm build` 全量通过 + 部署 Cloudflare Pages + 验证公网（需用户 Cloudflare 账号）
+- [x] 6.5 `pnpm build` 全量通过 + 部署 Cloudflare Pages + 验证公网（https://moodseed.pages.dev/；D1 已建+迁移；R2 待账号开通后补上）
 - [x] 6.6 推送 GitHub（已 `git init` + 首提交，待创建远端仓库）
 
 ## Phase 7 — 36 片成长拼图（SVG 重构 + 自由拼图）✅
@@ -85,5 +85,5 @@
 - [x] 核心闭环后端完整跑通（引导→记录→AI→碎片→修复→36块→翻牌→下一株）——API 层已 curl 验证
 - [~] 三页 + 引导 UI 浏览器端到端验证（浏览器因切换标签暂停，待恢复）
 - [x] 奖励规则正确（日3 / 7天+3 / 21兑1 / 日5瓶）
-- [ ] Cloudflare 真实部署可访问（待用户账号）
+- [x] Cloudflare 真实部署可访问（https://moodseed.pages.dev/；首页/API/D1 均已验证，图片上传需开通 R2）
 - [x] 项目文件标准化（PRODUCT/ARCHITECTURE/TASKS/AGENTS/README）+ git 提交
